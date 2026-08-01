@@ -1,0 +1,7 @@
+:root {
+	--zenless-ui-font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+.zenless-ui-placeholder {
+	font-family: var(--zenless-ui-font-family);
+}

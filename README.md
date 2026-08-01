@@ -1,26 +1,25 @@
-# Zenless UI
-一套基于 Vue 3.0 的仿绝区零桌面端组件库
+# Zenless UI Svelte
 
-[中文](https://github.com/ChrisChan13/zenless-ui/blob/main/README.md) | [English](https://github.com/ChrisChan13/zenless-ui/blob/main/README.EN.md)
+Zenless UI 的 Svelte 5 组件库迁移版本。目前完成了库打包、文档站、质量门禁和消费端验证骨架；组件将在后续迁移阶段逐步加入。
 
-## Install
-```shell
-pnpm install zenless-ui -S
+## 开发
+
+```sh
+corepack pnpm install
+corepack pnpm dev
 ```
 
-## Quick Start
-```javascript
-import { createApp } from 'vue'
-import ZenlessUI from 'zenless-ui'
-import 'zenless-ui/dist/index.css'
-import App from './App.vue'
+## 校验
 
-const app = createApp(App)
-
-app.use(ZenlessUI)
-app.mount('#app')
+```sh
+corepack pnpm lint
+corepack pnpm check
+corepack pnpm test:unit
+corepack pnpm build
 ```
-更多内容请查阅 [快速上手](https://chrischan13.github.io/zenless-ui)
 
-## LICENSE
-[MIT](https://github.com/ChrisChan13/zenless-ui/blob/main/LICENSE)
+完整迁移路径见 [SVELTE_MIGRATION_PLAN.md](./SVELTE_MIGRATION_PLAN.md)。
+
+## License
+
+[MIT](./LICENSE)
