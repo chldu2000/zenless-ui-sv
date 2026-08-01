@@ -1,7 +1,9 @@
-:root {
-	--zenless-ui-font-family: Inter, ui-sans-serif, system-ui, sans-serif;
-}
+@import './styles/tokens.css';
+@import './styles/reset.css';
+@import './styles/animation.css';
+@import './styles/icons.css';
 
 .zenless-ui-placeholder {
-	font-family: var(--zenless-ui-font-family);
+	font-family: var(--zenless-font-family);
+	color: var(--zenless-foreground);
 }

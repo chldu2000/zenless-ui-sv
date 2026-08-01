@@ -1,5 +1,5 @@
 <script lang="ts">
-	import ZenlessPlaceholder from '$lib/ZenlessPlaceholder.svelte';
+	import { ZenlessOverlayHost, ZenlessPlaceholder, ZenlessProvider } from '$lib/index.js';
 	import '$lib/styles.css';
 </script>
 
@@ -10,10 +10,13 @@
 
 <main>
 	<h1>Zenless UI Svelte</h1>
-	<p>组件库骨架已就绪；组件迁移将按计划分阶段完成。</p>
-	<ZenlessPlaceholder
-		>Package, type-check, test, SSR, and consumer smoke checks are enabled.</ZenlessPlaceholder
-	>
+	<p>公共基础设施已就绪；组件迁移将按计划分阶段完成。</p>
+	<ZenlessProvider isBold theme={{ tokens: { primary: '#fe427e' } }}>
+		<ZenlessPlaceholder>
+			Provider, theme tokens, locale, actions, SSR, and consumer smoke checks are enabled.
+		</ZenlessPlaceholder>
+		<ZenlessOverlayHost />
+	</ZenlessProvider>
 </main>
 
 <style>

@@ -4,3 +4,4 @@
 </script>
 
 <ZenlessPlaceholder>Vite client consumer</ZenlessPlaceholder>
+<i class="z-icon-home" aria-label="Home"></i>

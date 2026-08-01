@@ -1,0 +1,35 @@
+@keyframes z-ani-background {
+	from {
+		background: var(--zenless-gradient-yellow);
+	}
+	to {
+		background: var(--zenless-gradient-green);
+	}
+}
+
+@keyframes z-ani-border-color {
+	from {
+		border-color: var(--zenless-gradient-yellow);
+	}
+	to {
+		border-color: var(--zenless-gradient-green);
+	}
+}
+
+@keyframes z-ani-color {
+	from {
+		color: var(--zenless-gradient-yellow);
+	}
+	to {
+		color: var(--zenless-gradient-green);
+	}
+}
+
+@keyframes z-ani-size {
+	20% {
+		transform: scale(1);
+	}
+	to {
+		transform: scale(1.3);
+	}
+}
