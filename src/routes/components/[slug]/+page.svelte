@@ -19,13 +19,14 @@
 </script>
 
 <svelte:head><title>{data.meta.title} | Zenless UI Svelte</title></svelte:head>
-<main>
-	<a href={resolve('/components')}>← 全部组件</a>
-	<h1>{data.meta.title}</h1>
-	<p>{data.meta.summary}</p>
+<main class="component docs-component-page">
+	<a class="component-breadcrumb" href={resolve('/components')}>组件总览 / Components</a>
+	<h1 class="component-title">{data.meta.title}</h1>
+	<p class="component-content">{data.meta.summary}</p>
+	<h2 class="component-header">基础用法</h2>
 	<ComponentExample slug={data.meta.slug} />
 	<SourceCode code={source} />
-	<h2>API</h2>
+	<h2 class="component-header">API</h2>
 	<AttributeTable rows={propRows} />
 	<EventTable value={data.meta.callbacks} />
 	<MethodTable
@@ -49,11 +50,12 @@
 </main>
 
 <style>
-	main {
-		max-width: 52rem;
-		margin: 0 auto;
-		padding: 3rem 1.5rem;
-		color: var(--zenless-foreground);
+	.component-breadcrumb {
+		display: inline-block;
+		margin-bottom: 1rem;
+		font-size: 0.82rem;
+		letter-spacing: 0.05em;
+		text-transform: uppercase;
 	}
 	dl {
 		display: grid;
@@ -61,7 +63,8 @@
 		gap: 0.75rem;
 		padding: 1rem;
 		border: 1px solid var(--zenless-border);
-		border-radius: 0.75rem;
+		border-radius: 1rem;
+		background: rgb(20 20 20 / 82%);
 	}
 	dt {
 		font-weight: 700;

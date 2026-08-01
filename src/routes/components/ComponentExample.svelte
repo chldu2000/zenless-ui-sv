@@ -191,12 +191,16 @@
 
 <style>
 	.demo {
-		margin: 2rem 0;
-		padding: 1.25rem;
-		border: 1px solid var(--zenless-border);
-		border-radius: 0.75rem;
-		background: rgb(28 28 28 / 88%);
-		box-shadow: 0 1rem 2.5rem rgb(0 0 0 / 18%);
+		display: flex;
+		min-height: 3.5rem;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+		margin: 0;
+		padding: 1.9rem;
+		border-radius: 1rem;
+		background: #222;
+		box-shadow: inset 0 1px 3px #333;
 	}
 	.scroll-demo {
 		width: 100%;

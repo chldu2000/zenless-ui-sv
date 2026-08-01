@@ -1,23 +1,36 @@
 import { expect, test } from '@playwright/test';
 import { componentDocs, componentProps } from '../../src/routes/components/component-meta.js';
 
-test('renders the Svelte documentation skeleton', async ({ page }) => {
+test('renders the Vue-inspired Svelte documentation shell', async ({ page }) => {
 	await page.goto('/');
 
-	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Zenless UI Svelte');
-	await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(24, 24, 24)');
+	await expect(page.getByRole('heading', { level: 1 })).toHaveText('快速上手');
+	await expect(page.getByRole('link', { name: 'Zenless UI Svelte 首页' })).toBeVisible();
+	await expect(page.getByRole('navigation', { name: '文档导航' })).toBeVisible();
+	await expect(page.getByRole('link', { name: '快速上手' })).toHaveClass(/active/);
+	await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(0, 0, 0)');
 	await expect(page.locator('body')).toHaveCSS('color', 'rgb(245, 245, 245)');
-	await expect(
-		page.getByText(
-			'Provider, theme tokens, locale, actions, SSR, and consumer smoke checks are enabled.'
-		)
-	).toBeVisible();
+	await expect(page.getByText('pnpm add zenless-ui-svelte')).toBeVisible();
+});
+
+test('opens and closes the responsive documentation menu', async ({ page }) => {
+	await page.setViewportSize({ width: 390, height: 844 });
+	await page.goto('/components/button');
+
+	const menuButton = page.getByRole('button', { name: '菜单', exact: true });
+	await expect(page.getByRole('complementary')).not.toBeInViewport();
+	await menuButton.click();
+	await expect(menuButton).toHaveAttribute('aria-expanded', 'true');
+	await expect(page.getByRole('complementary')).toBeInViewport();
+	await expect(page.getByRole('link', { name: /^Button/ })).toHaveClass(/active/);
+	await page.keyboard.press('Escape');
+	await expect(menuButton).toHaveAttribute('aria-expanded', 'false');
 });
 
 test('renders low-risk presentation component examples', async ({ page }) => {
 	await page.goto('/components');
 
-	await expect(page.getByRole('heading', { name: '展示组件' })).toBeVisible();
+	await expect(page.getByRole('heading', { name: '组件总览' })).toBeVisible();
 	await expect(page.getByRole('button', { name: '确认' })).toBeVisible();
 	await expect(page.getByRole('progressbar')).toHaveCount(2);
 	await expect(page.getByRole('button', { name: 'Close' })).toBeVisible();

@@ -43,9 +43,9 @@
 	<meta name="description" content="Zenless UI Svelte 展示组件示例。" />
 </svelte:head>
 
-<main>
-	<a href={resolve('/')}>← 返回首页</a>
-	<h1>展示组件</h1>
+<main class="component docs-overview">
+	<h1 class="component-title">组件总览</h1>
+	<p class="component-content">按功能浏览全部 Svelte 组件，或从左侧导航进入完整 API 页面。</p>
 	<nav class="component-index" aria-label="组件示例">
 		{#each componentDocs as doc (doc.slug)}<a
 				href={resolve('/components/[slug]', { slug: doc.slug })}>{doc.title}</a
@@ -121,21 +121,16 @@
 </main>
 
 <style>
-	main {
-		max-width: 48rem;
-		margin: 0 auto;
-		padding: 3rem 1.5rem;
-		color: var(--zenless-foreground);
-	}
 	section {
-		display: grid;
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
 		gap: 1rem;
 		margin-top: 2rem;
-		padding: 1.25rem;
-		border: 1px solid var(--zenless-border);
-		border-radius: 0.75rem;
-		background: rgb(28 28 28 / 88%);
-		box-shadow: 0 1rem 2.5rem rgb(0 0 0 / 18%);
+		padding: 1.9rem;
+		border-radius: 1rem;
+		background: #222;
+		box-shadow: inset 0 1px 3px #333;
 	}
 	.component-index {
 		display: flex;
@@ -149,8 +144,9 @@
 		border-radius: 999px;
 	}
 	h2 {
+		width: 100%;
 		margin: 0;
-		font-size: 1.15rem;
+		font-size: 1.2rem;
 	}
 	:global(.z-progress) {
 		max-width: 20rem;
@@ -163,6 +159,7 @@
 	}
 	.navigation-grid {
 		display: grid;
+		width: 100%;
 		grid-template-columns: minmax(14rem, 1fr) minmax(14rem, 1fr);
 		gap: 1rem;
 	}
