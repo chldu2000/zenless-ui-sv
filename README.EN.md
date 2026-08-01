@@ -1,8 +1,10 @@
 # Zenless UI Svelte
 
-The Svelte 5 migration of Zenless UI. This branch currently includes library packaging, a documentation site, quality gates, consumer verification, plus Provider, theme, locale, and reusable DOM infrastructure. Components will be migrated in subsequent phases.
+The Svelte 5 migration of Zenless UI. This branch includes library packaging, a documentation site, quality gates, consumer verification, plus Provider, theme, locale, and reusable DOM infrastructure.
 
 The migrated presentation components are `ZenlessIcon`, `ZenlessButton`, `ZenlessLink`, `ZenlessTag`, `ZenlessBadge`, `ZenlessCard`, `ZenlessProgress`, and `ZenlessPattern`. Run the development site and visit `/components` for examples.
+
+Migrated form and navigation components include Input, Textarea, Switch, Radio, Checkbox, Form, Pagination, Collapse, Tabs, Menu, Dropdown, Select, and their companion child components.
 
 ## Using the infrastructure
 

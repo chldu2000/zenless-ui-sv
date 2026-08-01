@@ -1,0 +1,136 @@
+<script lang="ts">
+	import { tick, type Snippet } from 'svelte';
+	import type { Attachment } from 'svelte/attachments';
+	import type { HTMLAttributes } from 'svelte/elements';
+	import { clickOutside, escapeDismiss } from './actions/index.js';
+	import { setDropdown } from './navigation-context.js';
+	import type { ZenlessSize } from './types.js';
+
+	export interface ZenlessDropdownProps extends Omit<HTMLAttributes<HTMLDivElement>, 'oncommand'> {
+		children?: Snippet;
+		content?: Snippet;
+		open?: boolean;
+		trigger?: 'hover' | 'click';
+		disabled?: boolean;
+		size?: ZenlessSize;
+		hideOnCommand?: boolean;
+		oncommand?: (value: unknown) => void;
+		onopenchange?: (open: boolean) => void;
+	}
+
+	let {
+		children,
+		content,
+		open = $bindable(false),
+		trigger = 'hover',
+		disabled = false,
+		size,
+		hideOnCommand = true,
+		oncommand,
+		onopenchange,
+		class: className,
+		...rest
+	}: ZenlessDropdownProps = $props();
+	let triggerElement: HTMLButtonElement | undefined;
+	let menuElement: HTMLDivElement | undefined;
+	const captureTrigger: Attachment<HTMLButtonElement> = (node) => {
+		triggerElement = node;
+		return () => {
+			if (triggerElement === node) triggerElement = undefined;
+		};
+	};
+	const captureMenu: Attachment<HTMLDivElement> = (node) => {
+		menuElement = node;
+		return () => {
+			if (menuElement === node) menuElement = undefined;
+		};
+	};
+
+	function setOpen(next: boolean, restoreFocus = false) {
+		if (disabled || open === next) return;
+		open = next;
+		onopenchange?.(next);
+		if (next) {
+			void tick().then(() =>
+				menuElement
+					?.querySelector<HTMLElement>('[role=menuitem]:not([aria-disabled=true])')
+					?.focus()
+			);
+		} else if (restoreFocus) {
+			void tick().then(() => triggerElement?.focus());
+		}
+	}
+
+	setDropdown({
+		command(value) {
+			oncommand?.(value);
+			if (hideOnCommand) setOpen(false, true);
+		}
+	});
+
+	function menuKeydown(event: KeyboardEvent) {
+		const items = [
+			...(menuElement?.querySelectorAll<HTMLElement>('[role=menuitem]:not([aria-disabled=true])') ??
+				[])
+		];
+		const current = items.indexOf(document.activeElement as HTMLElement);
+		const next =
+			event.key === 'Home'
+				? 0
+				: event.key === 'End'
+					? items.length - 1
+					: event.key === 'ArrowDown'
+						? (current + 1) % items.length
+						: event.key === 'ArrowUp'
+							? (current - 1 + items.length) % items.length
+							: undefined;
+		if (next === undefined) return;
+		event.preventDefault();
+		items[next]?.focus();
+	}
+</script>
+
+<div
+	class={[
+		'z-dropdown',
+		size && `z-dropdown--${size}`,
+		open && 'is-visible',
+		disabled && 'is-disabled',
+		className
+	]
+		.filter(Boolean)
+		.join(' ')}
+	use:clickOutside={() => open && setOpen(false)}
+	use:escapeDismiss={() => open && setOpen(false, true)}
+	onmouseenter={() => trigger === 'hover' && !disabled && setOpen(true)}
+	onmouseleave={() => trigger === 'hover' && setOpen(false)}
+	{...rest}
+>
+	<button
+		{@attach captureTrigger}
+		class="z-dropdown__trigger"
+		type="button"
+		aria-haspopup="menu"
+		aria-expanded={open}
+		{disabled}
+		onclick={() => trigger === 'click' && setOpen(!open)}
+		onkeydown={(event) => {
+			if (event.key === 'ArrowDown' && !open) {
+				event.preventDefault();
+				setOpen(true);
+			}
+		}}
+	>
+		{@render children?.()}
+	</button>
+	<div
+		{@attach captureMenu}
+		class="z-dropdown__content"
+		role="menu"
+		tabindex="-1"
+		hidden={!open}
+		onkeydown={menuKeydown}
+	>
+		{@render content?.()}
+	</div>
+</div>

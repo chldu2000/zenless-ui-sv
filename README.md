@@ -1,8 +1,10 @@
 # Zenless UI Svelte
 
-Zenless UI 的 Svelte 5 组件库迁移版本。目前已具备库打包、文档站、质量门禁、消费端验证，以及 Provider、主题、国际化和可复用 DOM 基础设施；组件将在后续迁移阶段逐步加入。
+Zenless UI 的 Svelte 5 组件库迁移版本。目前已具备库打包、文档站、质量门禁、消费端验证，以及 Provider、主题、国际化和可复用 DOM 基础设施。
 
 已迁移的展示组件：`ZenlessIcon`、`ZenlessButton`、`ZenlessLink`、`ZenlessTag`、`ZenlessBadge`、`ZenlessCard`、`ZenlessProgress` 与 `ZenlessPattern`。运行开发站后可在 `/components` 查看示例。
+
+已迁移的表单与导航组件包括 Input、Textarea、Switch、Radio、Checkbox、Form、Pagination、Collapse、Tabs、Menu、Dropdown 和 Select 及其配套子组件。
 
 ## 使用基础设施
 
