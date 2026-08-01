@@ -1,12 +1,8 @@
 # Zenless UI Svelte
 
-Zenless UI 的 Svelte 5 组件库迁移版本。目前已具备库打包、文档站、质量门禁、消费端验证，以及 Provider、主题、国际化和可复用 DOM 基础设施。
+Zenless UI 的 Svelte 5 组件库。40 个具名组件、Provider、主题、国际化和可复用 DOM 基础设施均已完成迁移，并具备文档站、SSR/CSR 打包和消费端质量门禁。
 
-已迁移的展示组件：`ZenlessIcon`、`ZenlessButton`、`ZenlessLink`、`ZenlessTag`、`ZenlessBadge`、`ZenlessCard`、`ZenlessProgress` 与 `ZenlessPattern`。运行开发站后可在 `/components` 查看示例。
-
-已迁移的表单与导航组件包括 Input、Textarea、Switch、Radio、Checkbox、Form、Pagination、Collapse、Tabs、Menu、Dropdown 和 Select 及其配套子组件。
-
-已迁移的高级组件包括 Tooltip、Modal、Drawer、Message、Scrollbar、Backtop、Slider、Table 与 TableColumn；Vue 到 Svelte 的 API 差异见 `docs/migration-guide.md`。
+当前候选版本为 `0.1.0-next.0`。运行开发站后可在 `/components` 查看 28 组示例；Vue 到 Svelte 的完整差异见 `docs/migration-guide.md`。
 
 ## 使用基础设施
 
@@ -14,12 +10,12 @@ Zenless UI 的 Svelte 5 组件库迁移版本。目前已具备库打包、文�
 
 ```svelte
 <script lang="ts">
-	import { ZenlessProvider, zhCn } from 'zenless-ui-svelte';
+	import { ZenlessButton, ZenlessProvider, zhCn } from 'zenless-ui-svelte';
 	import 'zenless-ui-svelte/styles.css';
 </script>
 
 <ZenlessProvider locale={zhCn} theme={{ name: 'light' }}>
-	<!-- 迁移完成后的组件 -->
+	<ZenlessButton type="primary">开始</ZenlessButton>
 </ZenlessProvider>
 ```
 

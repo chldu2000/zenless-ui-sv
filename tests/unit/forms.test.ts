@@ -8,8 +8,10 @@ describe('form controls', () => {
 		const input = screen.getAllByDisplayValue('hello')[0];
 		await fireEvent.input(input, { target: { value: 'world' } });
 		expect(screen.getByTestId('text')).toHaveTextContent('world');
-		await fireEvent.click(screen.getAllByRole('checkbox')[0]);
+		await fireEvent.click(screen.getByRole('switch'));
 		expect(screen.getByTestId('toggle')).toHaveTextContent('true');
+		await fireEvent.click(screen.getByLabelText('Standalone'));
+		expect(screen.getByTestId('standalone')).toHaveTextContent('true');
 		await fireEvent.click(screen.getByLabelText('B'));
 		expect(screen.getByTestId('radio')).toHaveTextContent('b');
 		await fireEvent.click(screen.getByLabelText('Two'));

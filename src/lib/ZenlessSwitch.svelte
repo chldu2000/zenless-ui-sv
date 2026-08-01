@@ -36,6 +36,8 @@
 	<input
 		class="z-switch__input"
 		type="checkbox"
+		role="switch"
+		aria-checked={checked}
 		{checked}
 		{disabled}
 		onchange={change}

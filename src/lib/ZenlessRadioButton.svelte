@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { ComponentProps } from 'svelte';
 	import ZenlessRadio from './ZenlessRadio.svelte';
-	let props: ComponentProps<typeof ZenlessRadio> = $props();
+	let { checked = $bindable(false), ...props }: ComponentProps<typeof ZenlessRadio> = $props();
 </script>
 
-<ZenlessRadio {...props} shape="button" />
+<ZenlessRadio bind:checked {...props} shape="button" />

@@ -1,12 +1,8 @@
 # Zenless UI Svelte
 
-The Svelte 5 migration of Zenless UI. This branch includes library packaging, a documentation site, quality gates, consumer verification, plus Provider, theme, locale, and reusable DOM infrastructure.
+Zenless UI for Svelte 5. All 40 named components plus Provider, theme, locale, and reusable DOM infrastructure have been migrated, with documentation, SSR/CSR packaging, and consumer quality gates.
 
-The migrated presentation components are `ZenlessIcon`, `ZenlessButton`, `ZenlessLink`, `ZenlessTag`, `ZenlessBadge`, `ZenlessCard`, `ZenlessProgress`, and `ZenlessPattern`. Run the development site and visit `/components` for examples.
-
-Migrated form and navigation components include Input, Textarea, Switch, Radio, Checkbox, Form, Pagination, Collapse, Tabs, Menu, Dropdown, Select, and their companion child components.
-
-Migrated advanced components include Tooltip, Modal, Drawer, Message, Scrollbar, Backtop, Slider, Table, and TableColumn. See `docs/migration-guide.md` for Vue-to-Svelte API differences.
+The current release candidate is `0.1.0-next.0`. Run the development site and visit `/components` for 28 example groups. See `docs/migration-guide.md` for the complete Vue-to-Svelte API differences.
 
 ## Using the infrastructure
 
@@ -14,12 +10,12 @@ Import the stylesheet at your app entry point and use the Provider for local the
 
 ```svelte
 <script lang="ts">
-	import { ZenlessProvider, zhCn } from 'zenless-ui-svelte';
+	import { ZenlessButton, ZenlessProvider, zhCn } from 'zenless-ui-svelte';
 	import 'zenless-ui-svelte/styles.css';
 </script>
 
 <ZenlessProvider locale={zhCn} theme={{ name: 'light' }}>
-	<!-- Components will arrive in later migration phases. -->
+	<ZenlessButton type="primary">Start</ZenlessButton>
 </ZenlessProvider>
 ```
 

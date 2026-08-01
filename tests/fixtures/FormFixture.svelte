@@ -13,6 +13,7 @@
 	} from '../../src/lib/index.js';
 	let text = $state('hello');
 	let toggle = $state(false);
+	let standalone = $state(false);
 	let radio = $state<string | number | boolean>('a');
 	let checks = $state<(string | number | boolean)[]>(['one']);
 	let page = $state(1);
@@ -26,6 +27,9 @@
 >
 <output data-testid="text">{text}</output><ZenlessSwitch bind:checked={toggle} /><output
 	data-testid="toggle">{toggle}</output
+>
+<ZenlessCheckbox bind:checked={standalone}>Standalone</ZenlessCheckbox><output
+	data-testid="standalone">{standalone}</output
 >
 <ZenlessRadioGroup bind:value={radio}
 	><ZenlessRadio value="a">A</ZenlessRadio><ZenlessRadio value="b">B</ZenlessRadio

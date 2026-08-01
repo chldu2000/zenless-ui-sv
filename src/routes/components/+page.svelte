@@ -26,6 +26,7 @@
 		ZenlessTag
 	} from '$lib/index.js';
 	import '$lib/styles.css';
+	import { componentDocs } from './component-meta.js';
 	let tab = $state<string | number>('overview');
 	let menu = $state<string | number>('home');
 	let agent = $state<string | number | boolean>();
@@ -45,6 +46,11 @@
 <main>
 	<a href={resolve('/')}>← 返回首页</a>
 	<h1>展示组件</h1>
+	<nav class="component-index" aria-label="组件示例">
+		{#each componentDocs as doc (doc.slug)}<a
+				href={resolve('/components/[slug]', { slug: doc.slug })}>{doc.title}</a
+			>{/each}
+	</nav>
 	<section aria-labelledby="button-heading">
 		<h2 id="button-heading">Button / Link / Icon</h2>
 		<ZenlessButton type="primary" icon="check">确认</ZenlessButton>
@@ -128,6 +134,17 @@
 		padding: 1.25rem;
 		border: 1px solid var(--zenless-border);
 		border-radius: 0.75rem;
+	}
+	.component-index {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		margin: 1.5rem 0;
+	}
+	.component-index a {
+		padding: 0.4rem 0.75rem;
+		border: 1px solid var(--zenless-border);
+		border-radius: 999px;
 	}
 	h2 {
 		margin: 0;

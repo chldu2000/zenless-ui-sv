@@ -6,6 +6,7 @@
 		ZenlessTable,
 		type ZenlessTableColumnDefinition
 	} from 'zenless-ui-svelte';
+	import { enUs } from 'zenless-ui-svelte/locale';
 	import 'zenless-ui-svelte/styles.css';
 	type Agent = { name: string; level: number };
 	const agents: Agent[] = [{ name: 'Anby', level: 40 }];
@@ -23,3 +24,4 @@
 <ZenlessButton type="primary">SSR Button</ZenlessButton>
 <ZenlessProgress percent={50} color="success" />
 <ZenlessTable data={agents} {columns} rowKey="name" />
+<p lang={enUs.code}>{enUs.messages.common.confirm}</p>
