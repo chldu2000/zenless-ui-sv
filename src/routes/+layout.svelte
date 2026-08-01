@@ -2,6 +2,7 @@
 	import type { Snippet } from 'svelte';
 	import { ZenlessMessageHost, ZenlessOverlayHost, ZenlessProvider } from '$lib/index.js';
 	import '$lib/styles.css';
+	import './site.css';
 	let { children }: { children: Snippet } = $props();
 </script>
 

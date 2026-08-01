@@ -5,6 +5,8 @@ test('renders the Svelte documentation skeleton', async ({ page }) => {
 	await page.goto('/');
 
 	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Zenless UI Svelte');
+	await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(24, 24, 24)');
+	await expect(page.locator('body')).toHaveCSS('color', 'rgb(245, 245, 245)');
 	await expect(
 		page.getByText(
 			'Provider, theme tokens, locale, actions, SSR, and consumer smoke checks are enabled.'

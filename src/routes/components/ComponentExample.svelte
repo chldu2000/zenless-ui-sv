@@ -195,6 +195,8 @@
 		padding: 1.25rem;
 		border: 1px solid var(--zenless-border);
 		border-radius: 0.75rem;
+		background: rgb(28 28 28 / 88%);
+		box-shadow: 0 1rem 2.5rem rgb(0 0 0 / 18%);
 	}
 	.scroll-demo {
 		width: 100%;

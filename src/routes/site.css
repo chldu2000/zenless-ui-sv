@@ -1,0 +1,115 @@
+html {
+	min-width: 20rem;
+	color-scheme: dark;
+	background: #0d1012;
+}
+
+body {
+	min-width: 20rem;
+	min-height: 100vh;
+	margin: 0;
+	color: var(--zenless-foreground);
+	background: var(--zenless-background);
+	font-family: var(--zenless-font-family);
+	line-height: 1.5;
+	-webkit-font-smoothing: antialiased;
+	text-rendering: optimizeLegibility;
+}
+
+::selection {
+	color: var(--zenless-black);
+	background: var(--zenless-electric);
+}
+
+a {
+	color: var(--zenless-electric);
+	text-decoration-color: rgb(46 182 255 / 55%);
+	text-underline-offset: 0.2em;
+	transition:
+		color 180ms ease,
+		text-decoration-color 180ms ease;
+}
+
+a:hover {
+	color: var(--zenless-ice);
+	text-decoration-color: currentColor;
+}
+
+a:focus-visible {
+	outline: 2px solid var(--zenless-electric);
+	outline-offset: 4px;
+	border-radius: 0.15rem;
+}
+
+main > h1,
+main > h2,
+main > h3 {
+	color: var(--zenless-white);
+	line-height: 1.2;
+	letter-spacing: -0.02em;
+}
+
+main > p {
+	color: #c8cdd2;
+}
+
+code {
+	font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+main {
+	position: relative;
+}
+
+main > details {
+	margin: 1.5rem 0;
+}
+
+main > details > summary {
+	width: fit-content;
+	cursor: pointer;
+}
+
+main > details > pre {
+	overflow-x: auto;
+	padding: 1rem;
+	border: 1px solid var(--zenless-border);
+	border-radius: 0.75rem;
+	background: rgb(0 0 0 / 45%);
+}
+
+main > table {
+	width: 100%;
+	margin: 1rem 0;
+	border: 1px solid var(--zenless-border);
+	border-collapse: separate;
+	border-spacing: 0;
+	border-radius: 0.75rem;
+	background: rgb(28 28 28 / 78%);
+	table-layout: fixed;
+}
+
+main > table caption {
+	padding: 0.75rem;
+	font-weight: 600;
+}
+
+main > table th,
+main > table td {
+	padding: 0.75rem;
+	overflow-wrap: anywhere;
+	border-top: 1px solid var(--zenless-border);
+	text-align: left;
+	vertical-align: top;
+}
+
+main > table th:first-child,
+main > table td:first-child {
+	width: 32%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	a {
+		transition: none;
+	}
+}
