@@ -7,9 +7,14 @@ test('renders the Vue-inspired Svelte documentation shell', async ({ page }) => 
 	await expect(page.getByRole('heading', { level: 1 })).toHaveText('快速上手');
 	await expect(page.getByRole('link', { name: 'Zenless UI Svelte 首页' })).toBeVisible();
 	await expect(page.getByRole('navigation', { name: '文档导航' })).toBeVisible();
-	await expect(page.getByRole('link', { name: '快速上手' })).toHaveClass(/active/);
+	await expect(page.getByRole('menuitem', { name: '快速上手' })).toHaveClass(/is-active/);
+	await expect(page.locator('.container > .z-scrollbar.container-wrap')).toBeVisible();
+	await expect(page.locator('.z-menu.side-nav')).toBeVisible();
+	await expect(page.locator('.header .z-tooltip')).toHaveCount(1);
+	await expect(page.locator('.header .z-button')).toHaveCount(3);
+	await expect(page.locator('.header .z-link .z-button')).toHaveCount(1);
 	await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(0, 0, 0)');
-	await expect(page.locator('body')).toHaveCSS('color', 'rgb(245, 245, 245)');
+	await expect(page.locator('body')).toHaveCSS('color', 'rgb(255, 255, 255)');
 	await expect(page.getByText('pnpm add zenless-ui-svelte')).toBeVisible();
 });
 
@@ -18,11 +23,12 @@ test('opens and closes the responsive documentation menu', async ({ page }) => {
 	await page.goto('/components/button');
 
 	const menuButton = page.getByRole('button', { name: '菜单', exact: true });
-	await expect(page.getByRole('complementary')).not.toBeInViewport();
+	const navigation = page.getByRole('navigation', { name: '文档导航' });
+	await expect(navigation).not.toBeInViewport();
 	await menuButton.click();
 	await expect(menuButton).toHaveAttribute('aria-expanded', 'true');
-	await expect(page.getByRole('complementary')).toBeInViewport();
-	await expect(page.getByRole('link', { name: /^Button/ })).toHaveClass(/active/);
+	await expect(navigation).toBeInViewport();
+	await expect(page.getByRole('menuitem', { name: /^Button/ })).toHaveClass(/is-active/);
 	await page.keyboard.press('Escape');
 	await expect(menuButton).toHaveAttribute('aria-expanded', 'false');
 });

@@ -1,5 +1,18 @@
 import { expect, test } from '@playwright/test';
 
+async function prepareVisualPage(page: import('@playwright/test').Page, path: string) {
+	await page.goto(path);
+	await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+	await page.locator('.container-event').evaluate((video: HTMLVideoElement) => {
+		video.pause();
+		video.currentTime = 0;
+	});
+	await page.addStyleTag({
+		content: '.z-tabs__item.is-active::before { animation: none !important; }'
+	});
+	await page.waitForTimeout(1000);
+}
+
 const slugs = [
 	'backtop',
 	'badge',
@@ -33,20 +46,20 @@ const slugs = [
 
 for (const slug of slugs) {
 	test(`desktop visual baseline: ${slug}`, async ({ page }) => {
-		await page.setViewportSize({ width: 1280, height: 800 });
-		await page.goto(`/components/${slug}`);
-		await expect(page).toHaveScreenshot(`${slug}-desktop.png`, { fullPage: true });
+		await page.setViewportSize({ width: 1440, height: 900 });
+		await prepareVisualPage(page, `/components/${slug}`);
+		await expect(page).toHaveScreenshot(`${slug}-desktop.png`, { animations: 'allow' });
 	});
 	test(`mobile visual baseline: ${slug}`, async ({ page }) => {
 		await page.setViewportSize({ width: 390, height: 844 });
-		await page.goto(`/components/${slug}`);
-		await expect(page).toHaveScreenshot(`${slug}-mobile.png`, { fullPage: true });
+		await prepareVisualPage(page, `/components/${slug}`);
+		await expect(page).toHaveScreenshot(`${slug}-mobile.png`, { animations: 'allow' });
 	});
 }
 
 for (const slug of ['modal', 'drawer', 'dropdown', 'message']) {
 	test(`open overlay visual baseline: ${slug}`, async ({ page }) => {
-		await page.goto(`/components/${slug}`);
+		await prepareVisualPage(page, `/components/${slug}`);
 		const label =
 			slug === 'modal'
 				? '打开 Modal'
@@ -56,6 +69,6 @@ for (const slug of ['modal', 'drawer', 'dropdown', 'message']) {
 						? '操作'
 						: '显示消息';
 		await page.getByRole('button', { name: label }).click();
-		await expect(page).toHaveScreenshot(`${slug}-open.png`, { fullPage: true });
+		await expect(page).toHaveScreenshot(`${slug}-open.png`, { animations: 'allow' });
 	});
 }

@@ -12,9 +12,9 @@
 </script>
 
 <div class="demo-section">
-	{#if title}<h3 class="demo-section__title">{title}</h3>{/if}
+	{#if title}<h2 class="component-header">{title}</h2>{/if}
 	<section
-		class={['demo', dark && 'is-dark', className].filter(Boolean).join(' ')}
+		class={['component-preview', 'demo', dark && 'is-dark', className].filter(Boolean).join(' ')}
 		aria-label={title ?? '组件示例'}
 	>
 		{@render children?.()}
@@ -23,13 +23,7 @@
 
 <style>
 	.demo-section {
-		margin-top: 2.4rem;
-	}
-
-	.demo-section__title {
-		margin: 0 0 1rem;
-		color: #fff;
-		font-size: 1.1rem;
+		display: contents;
 	}
 
 	.demo {
@@ -40,8 +34,8 @@
 		align-items: center;
 		flex-wrap: wrap;
 		gap: 0.75rem;
-		padding: 1.9rem;
-		border-radius: 1rem;
+		padding: 30px;
+		border-radius: 16px;
 		background: #222;
 		box-shadow: inset 0 1px 3px #333;
 	}
@@ -52,7 +46,7 @@
 
 	@media (max-width: 40rem) {
 		.demo {
-			padding: 1.35rem;
+			padding: 24px;
 		}
 	}
 </style>

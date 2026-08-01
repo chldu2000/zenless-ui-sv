@@ -90,6 +90,7 @@
 		'plus',
 		'minus'
 	];
+	const formPositions = ['left', 'right', 'top'] as const;
 
 	let text = $state('新艾利都');
 	let password = $state('proxy-password');
@@ -132,7 +133,7 @@
 			<ZenlessBacktop target={scroller} visibleHeight={0} right={24} bottom={24} />
 		</DemoSection>
 	{:else if slug === 'badge'}
-		<DemoSection title="主题角标" dark>
+		<DemoSection title="基础用法" dark>
 			{#each [...colors, ...factions] as color (color.value)}
 				<ZenlessBadge value={42} type={color.value}
 					><ZenlessTag>{color.label}</ZenlessTag></ZenlessBadge
@@ -150,30 +151,40 @@
 				<ZenlessButton type={color.value}>{color.label}</ZenlessButton>
 			{/each}
 			<ZenlessButton highlight>高亮</ZenlessButton>
-		</DemoSection>
-		<DemoSection title="朴素与镂空">
 			{#each colors as color (color.value)}
 				<ZenlessButton type={color.value} plain>{color.label}</ZenlessButton>
 			{/each}
 			{#each colors as color (color.value)}
 				<ZenlessButton type={color.value} hollow>{color.label}</ZenlessButton>
 			{/each}
-		</DemoSection>
-		<DemoSection title="图标、加载与禁用">
-			<ZenlessButton icon="success">带图标</ZenlessButton>
-			<ZenlessButton loading>加载中</ZenlessButton>
-			<ZenlessButton disabled>禁用</ZenlessButton>
-			{#each factions as color (color.value)}
+			{#each [...colors, ...factions] as color (color.value)}
 				<ZenlessButton circle icon="success" type={color.value} aria-label={color.label} />
 			{/each}
 		</DemoSection>
-		<DemoSection title="尺寸">
+		<DemoSection title="禁用状态">
+			{#each colors as color (color.value)}
+				<ZenlessButton type={color.value} disabled>{color.label}</ZenlessButton>
+				<ZenlessButton type={color.value} plain disabled>{color.label}</ZenlessButton>
+				<ZenlessButton type={color.value} hollow disabled>{color.label}</ZenlessButton>
+			{/each}
+		</DemoSection>
+		<DemoSection title="图标按钮">
+			{#each colors as color (color.value)}
+				<ZenlessButton icon="success" type={color.value}>{color.label}</ZenlessButton>
+			{/each}
+		</DemoSection>
+		<DemoSection title="加载中">
+			<ZenlessButton loading>加载中</ZenlessButton>
+			<ZenlessButton loading type="primary">加载中</ZenlessButton>
+			<ZenlessButton loading disabled>加载中</ZenlessButton>
+		</DemoSection>
+		<DemoSection title="不同尺寸">
 			{#each sizes as size (size.label)}
 				<ZenlessButton size={size.value}>{size.label}</ZenlessButton>
 			{/each}
 		</DemoSection>
 	{:else if slug === 'card'}
-		<DemoSection title="代理人档案">
+		<DemoSection title="基础用法">
 			<ZenlessCard
 				image={imageUrl}
 				imageAlt="Zenless UI"
@@ -183,6 +194,8 @@
 				title="欢迎来到新艾利都"
 				content="绳匠，请选择需要查看的代理人档案。"
 			/>
+		</DemoSection>
+		<DemoSection title="自定义内容">
 			<ZenlessCard class="custom-card">
 				<div>自定义内容 1</div>
 				<div>自定义内容 2</div>
@@ -190,16 +203,39 @@
 			</ZenlessCard>
 		</DemoSection>
 	{:else if slug === 'checkbox'}
-		<DemoSection title="基础与禁用">
+		<DemoSection title="基础用法">
 			<ZenlessCheckbox bind:checked>单项选择</ZenlessCheckbox>
-			<ZenlessCheckbox checked disabled>已选禁用</ZenlessCheckbox>
-			<ZenlessCheckbox indeterminate>半选状态</ZenlessCheckbox>
 		</DemoSection>
-		<DemoSection title="复选框组与按钮样式">
+		<DemoSection title="禁用状态">
+			<ZenlessCheckbox checked disabled>已选禁用</ZenlessCheckbox>
+			<ZenlessCheckbox disabled>未选禁用</ZenlessCheckbox>
+		</DemoSection>
+		<DemoSection title="多选框组">
 			<ZenlessCheckboxGroup bind:value={checks} min={1} max={2}>
+				<ZenlessCheckbox value="anby">安比</ZenlessCheckbox>
+				<ZenlessCheckbox value="nicole">妮可</ZenlessCheckbox>
+				<ZenlessCheckbox value="billy">比利</ZenlessCheckbox>
+			</ZenlessCheckboxGroup>
+		</DemoSection>
+		<DemoSection title="可选项目数量限制">
+			<ZenlessCheckboxGroup bind:value={checks} min={1} max={2}>
+				<ZenlessCheckbox value="anby">安比</ZenlessCheckbox>
+				<ZenlessCheckbox value="nicole">妮可</ZenlessCheckbox>
+				<ZenlessCheckbox value="billy">比利</ZenlessCheckbox>
+			</ZenlessCheckboxGroup>
+		</DemoSection>
+		<DemoSection title="半选状态">
+			<ZenlessCheckbox indeterminate>全选</ZenlessCheckbox>
+		</DemoSection>
+		<DemoSection title="不同尺寸">
+			{#each sizes as size (size.label)}
+				<ZenlessCheckbox size={size.value}>{size.label}选项</ZenlessCheckbox>
+			{/each}
+		</DemoSection>
+		<DemoSection title="按钮样式">
+			<ZenlessCheckboxGroup bind:value={checks}>
 				<ZenlessCheckboxButton value="anby">安比</ZenlessCheckboxButton>
 				<ZenlessCheckboxButton value="nicole">妮可</ZenlessCheckboxButton>
-				<ZenlessCheckbox value="billy">比利</ZenlessCheckbox>
 			</ZenlessCheckboxGroup>
 		</DemoSection>
 	{:else if slug === 'collapse'}
@@ -212,22 +248,43 @@
 				<ZenlessCollapseItem name="disabled" title="禁用面板" disabled />
 			</ZenlessCollapse>
 		</DemoSection>
-		<DemoSection title="手风琴与简洁模式">
-			<ZenlessCollapse bind:value={accordion} accordion plain>
+		<DemoSection title="朴素面板">
+			<ZenlessCollapse bind:value={collapse} plain>
+				<ZenlessCollapseItem name="one" title="第一项">朴素面板内容。</ZenlessCollapseItem>
+				<ZenlessCollapseItem name="two" title="第二项">第二项内容。</ZenlessCollapseItem>
+			</ZenlessCollapse>
+		</DemoSection>
+		<DemoSection title="手风琴效果">
+			<ZenlessCollapse bind:value={accordion} accordion>
 				<ZenlessCollapseItem name="one" title="第一项">仅允许展开一个面板。</ZenlessCollapseItem>
-				<ZenlessCollapseItem name="two" title="第二项">简洁模式内容。</ZenlessCollapseItem>
+				<ZenlessCollapseItem name="two" title="第二项">手风琴内容。</ZenlessCollapseItem>
+			</ZenlessCollapse>
+		</DemoSection>
+		<DemoSection title="自定义标题">
+			<ZenlessCollapse value="custom">
+				<ZenlessCollapseItem name="custom">
+					{#snippet titleContent()}<i class="z-icon-info"></i>&nbsp;自定义标题{/snippet}
+					自定义面板内容。
+				</ZenlessCollapseItem>
+			</ZenlessCollapse>
+		</DemoSection>
+		<DemoSection title="禁用状态">
+			<ZenlessCollapse>
+				<ZenlessCollapseItem name="disabled" title="禁用面板" disabled />
 			</ZenlessCollapse>
 		</DemoSection>
 	{:else if slug === 'drawer'}
-		<DemoSection title="基础与全屏">
+		<DemoSection title="基础用法">
 			<ZenlessButton onclick={() => (drawer = true)}>打开抽屉</ZenlessButton>
-			<ZenlessButton onclick={() => (drawerFullscreen = true)}>打开全屏抽屉</ZenlessButton>
 			<ZenlessDrawer
 				bind:open={drawer}
 				title="代理人抽屉"
 				oncancel={() => (drawer = false)}
 				onconfirm={() => (drawer = false)}>抽屉内容</ZenlessDrawer
 			>
+		</DemoSection>
+		<DemoSection title="全屏抽屉">
+			<ZenlessButton onclick={() => (drawerFullscreen = true)}>打开全屏抽屉</ZenlessButton>
 			<ZenlessDrawer
 				bind:open={drawerFullscreen}
 				title="全屏抽屉"
@@ -237,7 +294,7 @@
 			>
 		</DemoSection>
 	{:else if slug === 'dropdown'}
-		<DemoSection title="悬停与点击">
+		<DemoSection title="基础用法">
 			<ZenlessDropdown>
 				悬停菜单
 				{#snippet content()}
@@ -246,6 +303,8 @@
 					<ZenlessDropdownItem value="disabled" disabled>禁用项</ZenlessDropdownItem>
 				{/snippet}
 			</ZenlessDropdown>
+		</DemoSection>
+		<DemoSection title="点击触发">
 			<ZenlessDropdown trigger="click">
 				操作
 				{#snippet content()}
@@ -254,7 +313,15 @@
 				{/snippet}
 			</ZenlessDropdown>
 		</DemoSection>
-		<DemoSection title="尺寸">
+		<DemoSection title="菜单隐藏方式">
+			<ZenlessDropdown trigger="click" hideOnCommand={false}>
+				点击项目后保持显示
+				{#snippet content()}
+					<ZenlessDropdownItem value="keep">保持菜单</ZenlessDropdownItem>
+				{/snippet}
+			</ZenlessDropdown>
+		</DemoSection>
+		<DemoSection title="不同尺寸">
 			{#each sizes.filter((item) => item.value) as size (size.label)}
 				<ZenlessDropdown trigger="click" size={size.value}>
 					{size.label}
@@ -264,7 +331,7 @@
 			{/each}
 		</DemoSection>
 	{:else if slug === 'form'}
-		<DemoSection title="标签布局" class="demo--stack">
+		<DemoSection title="基础用法" class="demo--stack">
 			<ZenlessForm labelWidth={90}>
 				<ZenlessFormItem label="代理人" required><ZenlessInput bind:value={text} /></ZenlessFormItem
 				>
@@ -274,10 +341,20 @@
 					></ZenlessFormItem
 				>
 			</ZenlessForm>
+		</DemoSection>
+		<DemoSection title="行内表单" class="demo--stack">
 			<ZenlessForm inline labelPosition="left">
 				<ZenlessFormItem label="编号"><ZenlessInput value="P-011" /></ZenlessFormItem>
 				<ZenlessFormItem><ZenlessButton type="primary">查询</ZenlessButton></ZenlessFormItem>
 			</ZenlessForm>
+		</DemoSection>
+		<DemoSection title="对齐方式" class="demo--stack">
+			{#each formPositions as position (position)}
+				<ZenlessForm labelPosition={position} labelWidth={90}>
+					<ZenlessFormItem label={`${position} 对齐`}><ZenlessInput value="示例" /></ZenlessFormItem
+					>
+				</ZenlessForm>
+			{/each}
 		</DemoSection>
 	{:else if slug === 'icon'}
 		<DemoSection title="基础用法">
@@ -285,21 +362,32 @@
 			<ZenlessIcon name="error" size={40} color="danger" aria-label="错误" />
 			<ZenlessIcon name="info" size={32} color="electric" aria-label="信息" />
 		</DemoSection>
+		<DemoSection title="Tips">
+			<p class="component-content">可通过 <code>z-icon-*</code> 类名前缀扩展自定义图标字体。</p>
+		</DemoSection>
 		<DemoSection title="图标集合">
 			{#each iconNames as name (name)}
 				<div class="icon-wrap"><ZenlessIcon {name} size={32} /><span>z-icon-{name}</span></div>
 			{/each}
 		</DemoSection>
 	{:else if slug === 'input'}
-		<DemoSection title="基础状态" class="demo--stack">
+		<DemoSection title="基础用法" class="demo--stack">
 			<ZenlessInput bind:value={text} placeholder="请输入内容" />
+		</DemoSection>
+		<DemoSection title="禁用状态" class="demo--stack">
 			<ZenlessInput value="禁用内容" placeholder="请输入内容" disabled />
+		</DemoSection>
+		<DemoSection title="可清空" class="demo--stack">
 			<ZenlessInput bind:value={text} placeholder="可清空" clearable />
+		</DemoSection>
+		<DemoSection title="密码框" class="demo--stack">
 			<ZenlessInput bind:value={password} type="password" placeholder="请输入密码" />
 		</DemoSection>
-		<DemoSection title="前后缀与组合输入" class="demo--stack">
+		<DemoSection title="前缀和后缀" class="demo--stack">
 			<ZenlessInput placeholder="请输入内容" prefixIcon="info" />
 			<ZenlessInput placeholder="请输入内容" suffixIcon="info" />
+		</DemoSection>
+		<DemoSection title="复合输入框" class="demo--stack">
 			<ZenlessInput placeholder="请输入域名">
 				{#snippet prefix()}http(s)://{/snippet}
 				{#snippet suffix()}.com{/snippet}
@@ -308,27 +396,32 @@
 				{#snippet append()}<ZenlessButton>发送</ZenlessButton>{/snippet}
 			</ZenlessInput>
 		</DemoSection>
-		<DemoSection title="尺寸" class="demo--stack">
+		<DemoSection title="不同尺寸" class="demo--stack">
 			{#each sizes as size (size.label)}
 				<ZenlessInput size={size.value} placeholder={`${size.label}输入框`} suffixIcon="info" />
 			{/each}
 		</DemoSection>
 	{:else if slug === 'link'}
-		<DemoSection title="主题链接">
+		<DemoSection title="基础用法">
 			{#each [...colors, ...factions] as color (color.value)}
 				<ZenlessLink href={resolve('/components')} type={color.value}>{color.label}</ZenlessLink>
 			{/each}
 			<ZenlessLink highlight>高亮</ZenlessLink>
 		</DemoSection>
-		<DemoSection title="状态与图标">
+		<DemoSection title="禁用状态">
 			<ZenlessLink disabled>禁用</ZenlessLink>
+		</DemoSection>
+		<DemoSection title="下划线">
 			<ZenlessLink underline href={resolve('/components')}>带下划线</ZenlessLink>
+			<ZenlessLink href={resolve('/components')}>无下划线</ZenlessLink>
+		</DemoSection>
+		<DemoSection title="图标">
 			<ZenlessLink type="success"><i class="z-icon-success"></i>&nbsp;确认</ZenlessLink>
 			<ZenlessLink type="danger"><i class="z-icon-error"></i>&nbsp;取消</ZenlessLink>
 		</DemoSection>
 	{:else if slug === 'menu'}
-		<DemoSection title="嵌套导航" class="demo--menu">
-			<ZenlessMenu bind:value={menu} accordion defaultOpen={['agents', 'settings']}>
+		<DemoSection title="基础用法" class="demo--menu">
+			<ZenlessMenu bind:value={menu} defaultOpen={['agents', 'settings']}>
 				<ZenlessMenuItem name="home" icon="info">首页</ZenlessMenuItem>
 				<ZenlessSubMenu name="agents" icon="success" title="代理人">
 					<ZenlessMenuItem name="agent-list">代理人列表</ZenlessMenuItem>
@@ -339,20 +432,38 @@
 				</ZenlessSubMenu>
 			</ZenlessMenu>
 		</DemoSection>
+		<DemoSection title="手风琴效果" class="demo--menu">
+			<ZenlessMenu bind:value={menu} accordion defaultOpen="agents">
+				<ZenlessSubMenu name="agents" title="代理人">
+					<ZenlessMenuItem name="agent-list">代理人列表</ZenlessMenuItem>
+				</ZenlessSubMenu>
+				<ZenlessSubMenu name="settings" title="设置">
+					<ZenlessMenuItem name="general">通用设置</ZenlessMenuItem>
+				</ZenlessSubMenu>
+			</ZenlessMenu>
+		</DemoSection>
 	{:else if slug === 'message'}
-		<DemoSection title="消息类型">
-			<ZenlessMessageHost><DemoMessageButton /></ZenlessMessageHost>
+		<DemoSection title="基础用法">
+			<ZenlessMessageHost><DemoMessageButton mode="basic" /></ZenlessMessageHost>
+		</DemoSection>
+		<DemoSection title="不同类型">
+			<ZenlessMessageHost><DemoMessageButton mode="types" /></ZenlessMessageHost>
+		</DemoSection>
+		<DemoSection title="单独引入">
+			<p class="component-content">通过 <code>message()</code> 命令式 API 调用消息提示。</p>
 		</DemoSection>
 	{:else if slug === 'modal'}
-		<DemoSection title="基础与全屏">
+		<DemoSection title="基础用法">
 			<ZenlessButton onclick={() => (modal = true)}>打开 Modal</ZenlessButton>
-			<ZenlessButton onclick={() => (modalFullscreen = true)}>打开全屏 Modal</ZenlessButton>
 			<ZenlessModal
 				bind:open={modal}
 				title="确认操作"
 				oncancel={() => (modal = false)}
 				onconfirm={() => (modal = false)}>是否确认本次委托？</ZenlessModal
 			>
+		</DemoSection>
+		<DemoSection title="全屏对话框">
+			<ZenlessButton onclick={() => (modalFullscreen = true)}>打开全屏 Modal</ZenlessButton>
 			<ZenlessModal
 				bind:open={modalFullscreen}
 				title="全屏提示"
@@ -362,42 +473,56 @@
 			>
 		</DemoSection>
 	{:else if slug === 'pagination'}
-		<DemoSection title="基础与极简">
+		<DemoSection title="基础用法">
 			<ZenlessPagination bind:value={page} total={80} pageSize={10} />
+		</DemoSection>
+		<DemoSection title="极简模式">
 			<ZenlessPagination bind:value={page} total={80} pageSize={10} minimal />
 		</DemoSection>
 	{:else if slug === 'pattern'}
-		<DemoSection title="纹理">
+		<DemoSection title="基础用法">
 			<ZenlessPattern type="stripes" class="pattern-demo">Stripes</ZenlessPattern>
 			<ZenlessPattern type="squares" class="pattern-demo">Squares</ZenlessPattern>
 			<ZenlessPattern type="rhombus" class="pattern-demo">Rhombus</ZenlessPattern>
 		</DemoSection>
 	{:else if slug === 'progress'}
-		<DemoSection title="线形进度" class="demo--stack">
+		<DemoSection title="基础用法" class="demo--stack">
 			{#each [...colors.slice(1), ...factions] as color, index (color.value)}
 				<ZenlessProgress percent={20 + index * 7} color={color.value} />
 			{/each}
 		</DemoSection>
-		<DemoSection title="环形与自定义颜色">
+		<DemoSection title="进度圈">
 			<ZenlessProgress type="circle" percent={65} color="electric">65%</ZenlessProgress>
 			<ZenlessProgress type="circle" percent={42} color="#ff66cc" size={120}>42%</ZenlessProgress>
 		</DemoSection>
 	{:else if slug === 'radio'}
-		<DemoSection title="基础与禁用">
+		<DemoSection title="基础用法">
+			<ZenlessRadio bind:checked>备选项</ZenlessRadio>
+		</DemoSection>
+		<DemoSection title="禁用状态">
+			<ZenlessRadio checked disabled>已选禁用</ZenlessRadio>
+			<ZenlessRadio disabled>未选禁用</ZenlessRadio>
+		</DemoSection>
+		<DemoSection title="单选框组">
 			<ZenlessRadioGroup bind:value={choice}>
 				<ZenlessRadio value="anby">安比</ZenlessRadio>
 				<ZenlessRadio value="nicole">妮可</ZenlessRadio>
 				<ZenlessRadio value="billy" disabled>比利</ZenlessRadio>
 			</ZenlessRadioGroup>
 		</DemoSection>
-		<DemoSection title="按钮样式与尺寸">
+		<DemoSection title="不同尺寸">
+			{#each sizes as size (size.label)}
+				<ZenlessRadio size={size.value}>{size.label}选项</ZenlessRadio>
+			{/each}
+		</DemoSection>
+		<DemoSection title="按钮样式">
 			<ZenlessRadioGroup bind:value={choice} size="large">
 				<ZenlessRadioButton value="anby">安比</ZenlessRadioButton>
 				<ZenlessRadioButton value="nicole">妮可</ZenlessRadioButton>
 			</ZenlessRadioGroup>
 		</DemoSection>
 	{:else if slug === 'scrollbar'}
-		<DemoSection title="自定义滚动条">
+		<DemoSection title="基础用法">
 			<div class="scrollbar-demo">
 				<ZenlessScrollbar resizable={false}
 					><div class="scrollbar-content">可滚动内容</div></ZenlessScrollbar
@@ -405,24 +530,34 @@
 			</div>
 		</DemoSection>
 	{:else if slug === 'select'}
-		<DemoSection title="基础状态" class="demo--stack">
+		<DemoSection title="基础用法" class="demo--stack">
 			<ZenlessSelect bind:value={selected} placeholder="请选择等级">
 				<ZenlessOption value={30} label="等级 30" />
 				<ZenlessOption value={40} label="等级 40" />
 				<ZenlessOption value={50} label="等级 50" />
 				<ZenlessOption value={60} label="等级 60" disabled />
 			</ZenlessSelect>
+		</DemoSection>
+		<DemoSection title="禁用状态" class="demo--stack">
 			<ZenlessSelect value={40} disabled
 				><ZenlessOption value={40} label="禁用选择器" /></ZenlessSelect
 			>
+		</DemoSection>
+		<DemoSection title="可清空" class="demo--stack">
 			<ZenlessSelect bind:value={selected} clearable>
+				<ZenlessOption value={30} label="等级 30" />
+				<ZenlessOption value={40} label="等级 40" />
+			</ZenlessSelect>
+		</DemoSection>
+		<DemoSection title="自定义模板" class="demo--stack">
+			<ZenlessSelect bind:value={selected}>
 				<ZenlessOption value={30} label="等级 30"
 					><i class="z-icon-info"></i>&nbsp;等级 30</ZenlessOption
 				>
 				<ZenlessOption value={40} label="等级 40" />
 			</ZenlessSelect>
 		</DemoSection>
-		<DemoSection title="尺寸" class="demo--stack">
+		<DemoSection title="不同尺寸" class="demo--stack">
 			{#each sizes as size (size.label)}
 				<ZenlessSelect size={size.value} placeholder={`${size.label}选择器`}>
 					<ZenlessOption value={size.label} label={size.label} />
@@ -430,21 +565,27 @@
 			{/each}
 		</DemoSection>
 	{:else if slug === 'slider'}
-		<DemoSection title="基础状态" class="demo--stack">
+		<DemoSection title="基础用法" class="demo--stack">
 			<ZenlessSlider bind:value={slider} /><output>{slider}</output>
+		</DemoSection>
+		<DemoSection title="显示 Tooltip" class="demo--stack">
 			<ZenlessSlider bind:value={slider} step={10} tooltip /><output>带提示：{slider}</output>
-			<ZenlessSlider value={70} disabled /><output>禁用</output>
 			<ZenlessSlider value={25} tooltip={(value) => `${value}% 能量`} />
 		</DemoSection>
+		<DemoSection title="禁用状态" class="demo--stack">
+			<ZenlessSlider value={70} disabled /><output>禁用</output>
+		</DemoSection>
 	{:else if slug === 'switch'}
-		<DemoSection title="基础与禁用">
+		<DemoSection title="基础用法">
 			<ZenlessSwitch bind:checked />
 			<ZenlessSwitch checked={false} />
+		</DemoSection>
+		<DemoSection title="禁用状态">
 			<ZenlessSwitch checked disabled />
 			<ZenlessSwitch checked={false} disabled />
 		</DemoSection>
 	{:else if slug === 'table'}
-		<DemoSection title="基础表格" class="demo--stack">
+		<DemoSection title="基础用法" class="demo--stack">
 			<ZenlessTable data={rows} rowKey="name">
 				<ZenlessTableColumn prop="name" label="代理人" />
 				<ZenlessTableColumn prop="role" label="定位" />
@@ -455,12 +596,14 @@
 			</ZenlessTable>
 		</DemoSection>
 	{:else if slug === 'tabs'}
-		<DemoSection title="基础、插槽与禁用" class="demo--stack">
+		<DemoSection title="基础用法" class="demo--stack">
 			<ZenlessTabs bind:value={tab}>
 				<ZenlessTabPanel name="basic" label="基础信息">基础信息面板</ZenlessTabPanel>
 				<ZenlessTabPanel name="skills" label="技能">技能面板</ZenlessTabPanel>
-				<ZenlessTabPanel name="gears" label="装备" disabled>装备面板</ZenlessTabPanel>
+				<ZenlessTabPanel name="gears" label="装备">装备面板</ZenlessTabPanel>
 			</ZenlessTabs>
+		</DemoSection>
+		<DemoSection title="自定义标签页" class="demo--stack">
 			<ZenlessTabs value="custom" placement="bottom-left">
 				<ZenlessTabPanel name="custom" label="自定义">
 					{#snippet labelContent()}<span>自定义&nbsp;</span><i class="z-icon-success"></i>{/snippet}
@@ -469,42 +612,44 @@
 				<ZenlessTabPanel name="other" label="其他">其他内容</ZenlessTabPanel>
 			</ZenlessTabs>
 		</DemoSection>
+		<DemoSection title="禁用标签页" class="demo--stack">
+			<ZenlessTabs value="basic">
+				<ZenlessTabPanel name="basic" label="基础">基础面板</ZenlessTabPanel>
+				<ZenlessTabPanel name="disabled" label="禁用" disabled>禁用面板</ZenlessTabPanel>
+			</ZenlessTabs>
+		</DemoSection>
 	{:else if slug === 'tag'}
-		<DemoSection title="主题与阵营色" dark>
+		<DemoSection title="基础用法" dark>
 			{#each [...colors, ...factions] as color (color.value)}
 				<ZenlessTag type={color.value}>{color.label}</ZenlessTag>
 			{/each}
 		</DemoSection>
-		<DemoSection title="朴素、镂空与可关闭" dark>
-			{#each colors as color (color.value)}<ZenlessTag type={color.value} plain
-					>{color.label}</ZenlessTag
-				>{/each}
-			{#each colors as color (color.value)}<ZenlessTag type={color.value} hollow
-					>{color.label}</ZenlessTag
-				>{/each}
+		<DemoSection title="可移除标签" dark>
 			{#each tags as tag (tag)}
 				<ZenlessTag closable onclose={() => (tags = tags.filter((item) => item !== tag))}
 					>{tag}</ZenlessTag
 				>
 			{/each}
 		</DemoSection>
-		<DemoSection title="尺寸" dark>
+		<DemoSection title="不同尺寸" dark>
 			{#each sizes as size (size.label)}<ZenlessTag size={size.value}>{size.label}</ZenlessTag
 				>{/each}
 		</DemoSection>
 	{:else if slug === 'textarea'}
-		<DemoSection title="基础状态" class="demo--stack">
+		<DemoSection title="基础用法" class="demo--stack">
 			<ZenlessTextarea bind:value={text} placeholder="请输入委托说明" />
+		</DemoSection>
+		<DemoSection title="禁用状态" class="demo--stack">
 			<ZenlessTextarea value="禁用内容" disabled />
+		</DemoSection>
+		<DemoSection title="设置行数" class="demo--stack">
+			<ZenlessTextarea bind:value={text} rows={5} />
+		</DemoSection>
+		<DemoSection title="自适应高度" class="demo--stack">
 			<ZenlessTextarea bind:value={text} autoSize />
 		</DemoSection>
-		<DemoSection title="尺寸与对齐" class="demo--stack">
-			{#each sizes as size (size.label)}
-				<ZenlessTextarea size={size.value} value={size.label} textAlign="center" />
-			{/each}
-		</DemoSection>
 	{:else if slug === 'tooltip'}
-		<DemoSection title="方向">
+		<DemoSection title="基础用法">
 			<ZenlessTooltip content="顶部提示" placement="top"
 				><ZenlessButton>上</ZenlessButton></ZenlessTooltip
 			>
@@ -520,9 +665,17 @@
 			<ZenlessTooltip content="始终显示" placement="left" visible
 				><ZenlessButton>显示</ZenlessButton></ZenlessTooltip
 			>
+		</DemoSection>
+		<DemoSection title="禁用状态">
 			<ZenlessTooltip content="不会显示" disabled
 				><ZenlessButton>禁用</ZenlessButton></ZenlessTooltip
 			>
+		</DemoSection>
+		<DemoSection title="自定义内容">
+			<ZenlessTooltip placement="top">
+				<ZenlessButton>自定义</ZenlessButton>
+				{#snippet contentSnippet()}<i class="z-icon-info"></i>&nbsp;自定义提示{/snippet}
+			</ZenlessTooltip>
 		</DemoSection>
 	{/if}
 </div>
