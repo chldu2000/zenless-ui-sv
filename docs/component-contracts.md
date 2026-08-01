@@ -5,9 +5,9 @@
 | # | Svelte 组件 | 核心值/Props | Callbacks | Snippets / Context | DOM / 浏览器能力 |
 | -: | --- | --- | --- | --- | --- |
 | 1 | ZenlessBacktop | target, visibleHeight, right, bottom | onclick | children | target scroll listener（清理） |
-| 2 | ZenlessBadge | value, max, hidden, type | — | children | `.z-badge` |
+| 2 | ZenlessBadge | value, type, isDot | — | children | `.z-badge` |
 | 3 | ZenlessButton | type, size, icon, loading, disabled | onclick | children | 原生 button |
-| 4 | ZenlessCard | title, content | — | children/header/footer | `.z-card` |
+| 4 | ZenlessCard | image, avatar, nickname, title, content | — | children | `.z-card` |
 | 5 | ZenlessCheckbox | bind:checked, value, disabled | onchange | children / ChoiceGroup | 原生 checkbox |
 | 6 | ZenlessCheckboxButton | bind:checked, value | onchange | children / ChoiceGroup | 原生 checkbox |
 | 7 | ZenlessCheckboxGroup | bind:value, min, max, disabled | onchange | children / provider | 动态子项 |

@@ -6,7 +6,16 @@
 	import MethodTable from '../docs/MethodTable.svelte';
 	import SlotTable from '../docs/SlotTable.svelte';
 	import SourceCode from '../docs/SourceCode.svelte';
+	import { componentProps } from '../component-meta.js';
 	let { data } = $props();
+	const propRows = $derived(
+		data.meta.components
+			.filter((component: string) => componentProps[component])
+			.map((component: string) => ({ name: component, description: componentProps[component] }))
+	);
+	const source = $derived(
+		`import { ${data.meta.components.join(', ')} } from 'zenless-ui-svelte';\nimport 'zenless-ui-svelte/styles.css';\n\n<${data.meta.components[0]} />`
+	);
 </script>
 
 <svelte:head><title>{data.meta.title} | Zenless UI Svelte</title></svelte:head>
@@ -15,11 +24,9 @@
 	<h1>{data.meta.title}</h1>
 	<p>{data.meta.summary}</p>
 	<ComponentExample slug={data.meta.slug} />
-	<SourceCode code={`<${data.meta.components[0]} />`} />
+	<SourceCode code={source} />
 	<h2>API</h2>
-	<AttributeTable
-		rows={[{ name: data.meta.bindable ?? 'props', description: data.meta.summary }]}
-	/>
+	<AttributeTable rows={propRows} />
 	<EventTable value={data.meta.callbacks} />
 	<MethodTable
 		value={data.meta.slug === 'scrollbar' ? 'getScrollTarget() / scrollTo()' : undefined}

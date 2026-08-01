@@ -7,7 +7,8 @@
 </script>
 
 {#if rows.length}<table>
-		<caption>Props 与绑定</caption><thead><tr><th>名称</th><th>说明</th></tr></thead><tbody
+		<caption>Props、类型与默认值</caption><thead><tr><th>组件</th><th>公共 Props</th></tr></thead
+		><tbody
 			>{#each rows as row (row.name)}<tr
 					><td><code>{row.name}</code></td><td>{row.description}</td></tr
 				>{/each}</tbody

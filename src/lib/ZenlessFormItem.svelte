@@ -9,14 +9,14 @@
 		label?: string;
 		required?: boolean;
 		labelWidth?: string | number;
-		labelSnippet?: Snippet;
+		labelContent?: Snippet;
 	}
 	let {
 		children,
 		label,
 		required = false,
 		labelWidth,
-		labelSnippet,
+		labelContent,
 		class: className,
 		...restProps
 	}: Props = $props();
@@ -46,10 +46,10 @@
 		.join(' ')}
 	{...restProps}
 >
-	{#if labelSnippet || label || (form && !form.inline)}<label
+	{#if labelContent || label || (form && !form.inline)}<label
 			class="z-form-item__label"
 			style={labelStyle}
-			>{#if labelSnippet}{@render labelSnippet()}{:else}{label}{/if}</label
+			>{#if labelContent}{@render labelContent()}{:else}{label}{/if}</label
 		>{/if}
 	<div class="z-form-item__content">{@render children?.()}</div>
 </div>
