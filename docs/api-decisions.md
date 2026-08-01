@@ -12,5 +12,5 @@
 | Overlay | Modal/Drawer 共享 portal、Escape、focus trap/restore 和 body scroll lock |
 | Actions | 保留公开低层 actions；其类型、更新和清理属于公共契约 |
 | CSS | 保留 `z-*` 类名；主题值迁移到 `--zenless-*` custom properties |
-| 旧 Vue 包 | 阶段 0–6 保留 `packages/` 和 `examples/` 对照；阶段 7 通过独立提交删除，历史版本由 Git tag/commit 维护 |
+| 旧 Vue 包 | 阶段 0–6 保留 `packages/` 和 `examples/` 对照；阶段 7 已通过独立提交删除，Vue 1.x 由 Git 提交 `4066875` 维护 |
 | 发布策略 | `0.1.0-next.0` prerelease 候选，真实项目验证后再发布 stable |

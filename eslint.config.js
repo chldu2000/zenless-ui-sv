@@ -11,13 +11,7 @@ const gitignorePath = path.resolve(import.meta.dirname, '.gitignore');
 export default defineConfig(
 	includeIgnoreFile(gitignorePath),
 	{
-		ignores: [
-			'examples/**',
-			'packages/**',
-			'src/utils/**',
-			'tests/consumers/**',
-			'vite.config.site.js'
-		]
+		ignores: ['tests/consumers/**']
 	},
 	js.configs.recommended,
 	ts.configs.recommended,

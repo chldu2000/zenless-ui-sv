@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import {
 	componentDocs,
@@ -56,6 +56,13 @@ function assert(condition, message) {
 	if (!condition) throw new Error(message);
 }
 
+function sourceFiles(directory) {
+	return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+		const path = resolve(directory, entry.name);
+		return entry.isDirectory() ? sourceFiles(path) : [path];
+	});
+}
+
 assert(
 	vuePublicComponents.length === 40,
 	'The frozen Vue public component list must contain 40 entries.'
@@ -86,4 +93,23 @@ assert(
 	'The public library entry must not depend on SvelteKit runtime APIs.'
 );
 
-console.log('Migration audit passed: 40 components, 37 examples, 28 routes, and public exports.');
+const librarySource = sourceFiles(resolve(projectRoot, 'src/lib'))
+	.filter((file) => /\.(?:js|ts|svelte)$/.test(file))
+	.map((file) => readFileSync(file, 'utf8'))
+	.join('\n');
+const allDependencies = {
+	...manifest.dependencies,
+	...manifest.devDependencies,
+	...manifest.peerDependencies
+};
+assert(!('vue' in allDependencies), 'Vue must not remain in package dependencies.');
+assert(!('vue-router' in allDependencies), 'Vue Router must not remain in package dependencies.');
+assert(!/from\s+['"]vue(?:\/|['"])/.test(librarySource), 'Vue runtime imports remain in src/lib.');
+assert(
+	!/\b(?:createVNode|defineComponent)\s*\(/.test(librarySource),
+	'Vue VNode APIs remain in src/lib.'
+);
+
+console.log(
+	'Migration audit passed: 40 components, 37 examples, 28 routes, public exports, and no Vue runtime.'
+);

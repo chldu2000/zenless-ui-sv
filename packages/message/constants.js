@@ -1,1 +1,0 @@
-export const messageTypes = ['success', 'error', 'warning']

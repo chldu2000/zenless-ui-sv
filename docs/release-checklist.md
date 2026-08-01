@@ -11,11 +11,11 @@
 
 ## 发布前人工步骤
 
-1. 明确授权删除旧 Vue 源码并完成独立清理提交。
-2. 确认 npm 登录身份及 `zenless-ui-svelte` 包名权限。
+1. 已获得授权并通过独立提交删除旧 Vue 源码。
+2. 恢复发布工作后，确认 npm 登录身份及 `zenless-ui-svelte` 包名权限。
 3. 检查 `pnpm pack --dry-run` 输出与 Git 状态。
 4. 发布：`pnpm publish --tag next --no-git-checks`。
 5. 在一个仓库外的真实 Svelte 应用安装 `zenless-ui-svelte@next`，复验 SSR/CSR 与样式。
 6. 记录包版本、消费项目和阻断修复；验证完成前不发布 stable。
 
-发布会改变外部 npm 状态，必须由仓库维护者明确授权并提供有效凭据。当前自动化的两个隔离消费项目验证的是实际 tarball，但不冒充已发布的 registry 包。
+发布会改变外部 npm 状态，维护者已明确要求暂不执行。当前自动化的两个隔离消费项目验证的是实际 tarball，但不冒充已发布的 registry 包。
