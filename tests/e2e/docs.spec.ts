@@ -10,3 +10,12 @@ test('renders the Svelte documentation skeleton', async ({ page }) => {
 		)
 	).toBeVisible();
 });
+
+test('renders low-risk presentation component examples', async ({ page }) => {
+	await page.goto('/components');
+
+	await expect(page.getByRole('heading', { name: '展示组件' })).toBeVisible();
+	await expect(page.getByRole('button', { name: '确认' })).toBeVisible();
+	await expect(page.getByRole('progressbar')).toHaveCount(2);
+	await expect(page.getByRole('button', { name: 'Close' })).toBeVisible();
+});

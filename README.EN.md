@@ -2,6 +2,8 @@
 
 The Svelte 5 migration of Zenless UI. This branch currently includes library packaging, a documentation site, quality gates, consumer verification, plus Provider, theme, locale, and reusable DOM infrastructure. Components will be migrated in subsequent phases.
 
+The migrated presentation components are `ZenlessIcon`, `ZenlessButton`, `ZenlessLink`, `ZenlessTag`, `ZenlessBadge`, `ZenlessCard`, `ZenlessProgress`, and `ZenlessPattern`. Run the development site and visit `/components` for examples.
+
 ## Using the infrastructure
 
 Import the stylesheet at your app entry point and use the Provider for local theme and locale configuration:

@@ -1,4 +1,16 @@
 export { default as ZenlessPlaceholder } from './ZenlessPlaceholder.svelte';
+export { default as ZenlessIcon } from './ZenlessIcon.svelte';
+export { default as ZenlessButton } from './ZenlessButton.svelte';
+export { default as ZenlessLink } from './ZenlessLink.svelte';
+export { default as ZenlessTag } from './ZenlessTag.svelte';
+export { default as ZenlessBadge } from './ZenlessBadge.svelte';
+export { default as ZenlessCard } from './ZenlessCard.svelte';
+export { default as ZenlessProgress } from './ZenlessProgress.svelte';
+export {
+	default as ZenlessPattern,
+	zenlessPatternTypes,
+	type ZenlessPatternType
+} from './ZenlessPattern.svelte';
 export { default as ZenlessProvider } from './ZenlessProvider.svelte';
 export { default as ZenlessOverlayHost } from './ZenlessOverlayHost.svelte';
 export { getZenlessContext, type ZenlessContextValue } from './context.js';

@@ -2,6 +2,7 @@
 @import './styles/reset.css';
 @import './styles/animation.css';
 @import './styles/icons.css';
+@import './styles/components.css';
 
 .zenless-ui-placeholder {
 	font-family: var(--zenless-font-family);
