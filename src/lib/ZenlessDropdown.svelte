@@ -3,6 +3,7 @@
 	import type { Attachment } from 'svelte/attachments';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { clickOutside, escapeDismiss } from './actions/index.js';
+	import { getZenlessContext } from './context.js';
 	import { setDropdown } from './navigation-context.js';
 	import type { ZenlessSize } from './types.js';
 
@@ -15,6 +16,7 @@
 		size?: ZenlessSize;
 		hideOnCommand?: boolean;
 		oncommand?: (value: unknown) => void;
+		ontrigger?: (open: boolean) => void;
 		onopenchange?: (open: boolean) => void;
 	}
 
@@ -27,12 +29,14 @@
 		size,
 		hideOnCommand = true,
 		oncommand,
+		ontrigger,
 		onopenchange,
 		class: className,
 		...rest
 	}: ZenlessDropdownProps = $props();
 	let triggerElement: HTMLButtonElement | undefined;
 	let menuElement: HTMLDivElement | undefined;
+	const zenless = getZenlessContext();
 	const captureTrigger: Attachment<HTMLButtonElement> = (node) => {
 		triggerElement = node;
 		return () => {
@@ -49,6 +53,7 @@
 	function setOpen(next: boolean, restoreFocus = false) {
 		if (disabled || open === next) return;
 		open = next;
+		ontrigger?.(next);
 		onopenchange?.(next);
 		if (next) {
 			void tick().then(() =>
@@ -96,6 +101,7 @@
 		size && `z-dropdown--${size}`,
 		open && 'is-visible',
 		disabled && 'is-disabled',
+		zenless.isBold && 'is-bold',
 		className
 	]
 		.filter(Boolean)
@@ -128,7 +134,8 @@
 		class="z-dropdown__content"
 		role="menu"
 		tabindex="-1"
-		hidden={!open}
+		aria-hidden={!open}
+		style:visibility={open ? 'visible' : 'hidden'}
 		onkeydown={menuKeydown}
 	>
 		{@render content?.()}

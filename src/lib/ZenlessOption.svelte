@@ -6,22 +6,23 @@
 
 	export interface ZenlessOptionProps extends Omit<HTMLButtonAttributes, 'value'> {
 		children?: Snippet;
-		label?: string;
-		value: SelectValue;
+		label?: SelectValue;
+		value?: SelectValue;
 		disabled?: boolean;
 	}
 
 	const uid = $props.id();
 	let {
-		value,
+		value = uid,
 		children,
-		label = String(value),
+		label,
 		disabled = false,
 		class: className,
 		...rest
 	}: ZenlessOptionProps = $props();
 	const select = getSelect();
 	const token = Symbol('select-option');
+	const actualLabel = $derived(String(label ?? value));
 	let element: HTMLButtonElement | undefined;
 	const captureElement: Attachment<HTMLButtonElement> = (node) => {
 		element = node;
@@ -38,7 +39,7 @@
 				return value;
 			},
 			get label() {
-				return label;
+				return actualLabel;
 			},
 			get disabled() {
 				return disabled;
@@ -66,5 +67,5 @@
 	onclick={() => select?.select(value)}
 	{...rest}
 >
-	{#if children}{@render children()}{:else}{label}{/if}
+	{#if children}{@render children()}{:else}{actualLabel}{/if}
 </button>

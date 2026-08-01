@@ -3,11 +3,13 @@
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { SvelteMap } from 'svelte/reactivity';
 	import { setMenu, type NavigationValue } from './navigation-context.js';
+	import ZenlessScrollbar from './ZenlessScrollbar.svelte';
 
 	export interface ZenlessMenuProps extends Omit<HTMLAttributes<HTMLElement>, 'onchange'> {
 		children?: Snippet;
 		value?: NavigationValue;
 		accordion?: boolean;
+		defaultOpen?: NavigationValue | NavigationValue[];
 		onchange?: (value: NavigationValue) => void;
 	}
 
@@ -15,12 +17,18 @@
 		children,
 		value = $bindable<NavigationValue>(),
 		accordion = false,
+		defaultOpen,
 		onchange,
 		class: className,
 		...rest
 	}: ZenlessMenuProps = $props();
 	const submenus = new SvelteMap<symbol, () => void>();
-	let items: { token: symbol; disabled: () => boolean }[] = $state([]);
+	let items: {
+		token: symbol;
+		name: () => NavigationValue;
+		parent: () => NavigationValue | undefined;
+		disabled: () => boolean;
+	}[] = $state([]);
 
 	setMenu({
 		get value() {
@@ -29,8 +37,9 @@
 		get accordion() {
 			return accordion;
 		},
-		registerItem(token, disabled) {
-			if (!items.some((item) => item.token === token)) items.push({ token, disabled });
+		registerItem(token, name, parent, disabled) {
+			if (!items.some((item) => item.token === token))
+				items.push({ token, name, parent, disabled });
 		},
 		unregisterItem(token) {
 			const index = items.findIndex((item) => item.token === token);
@@ -39,6 +48,15 @@
 		isTabStop(token, name) {
 			if (value !== undefined) return value === name;
 			return items.find((item) => !item.disabled())?.token === token;
+		},
+		isActive(name) {
+			if (value === name) return true;
+			return items.some((item) => item.name() === value && item.parent() === name);
+		},
+		isSubmenuInitiallyOpen(name) {
+			const names =
+				defaultOpen === undefined ? [] : Array.isArray(defaultOpen) ? defaultOpen : [defaultOpen];
+			return names.includes(name);
 		},
 		select(name) {
 			if (value === name) return;
@@ -81,5 +99,9 @@
 	onkeydown={keydown}
 	{...rest}
 >
-	<div class="z-menu__content" role="menu">{@render children?.()}</div>
+	<div class="z-menu__prefix" aria-hidden="true"><i class="z-icon-caret-top"></i></div>
+	<ZenlessScrollbar class="z-menu__scrollbar" hideScroll fixed={false}>
+		<div class="z-menu__content" role="menu">{@render children?.()}</div>
+	</ZenlessScrollbar>
+	<div class="z-menu__suffix" aria-hidden="true"><i class="z-icon-caret-bottom"></i></div>
 </nav>

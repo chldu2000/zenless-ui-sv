@@ -40,7 +40,7 @@
 			{#if nickname}<div class="z-card__nickname">{nickname}</div>{/if}
 		</div>
 	{/if}
-	{#if title}<h3 class="z-card__title">{title}</h3>{/if}
-	{#if content}<p class="z-card__content">{content}</p>{/if}
+	{#if title}<div class="z-card__title">{title}</div>{/if}
+	{#if content}<div class="z-card__content">{content}</div>{/if}
 	{@render children?.()}
 </article>

@@ -24,10 +24,10 @@
 		...restProps
 	}: Props = $props();
 	const zenless = getZenlessContext();
-	const pageCount = $derived(Math.max(1, Math.ceil(total / pageSize)));
-	const currentPage = $derived(Math.min(pageCount, Math.max(1, value)));
+	const pageCount = $derived(Math.ceil(total / pageSize));
+	const currentPage = $derived(value);
 	function change(next: number) {
-		value = Math.min(pageCount, Math.max(1, next));
+		value = next;
 		onchange?.(value);
 	}
 </script>

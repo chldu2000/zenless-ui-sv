@@ -23,7 +23,6 @@
 	<a class="component-breadcrumb" href={resolve('/components')}>组件总览 / Components</a>
 	<h1 class="component-title">{data.meta.title}</h1>
 	<p class="component-content">{data.meta.summary}</p>
-	<h2 class="component-header">基础用法</h2>
 	<ComponentExample slug={data.meta.slug} />
 	<SourceCode code={source} />
 	<h2 class="component-header">API</h2>

@@ -6,7 +6,7 @@ export default defineConfig({
 	webServer: {
 		command: 'corepack pnpm run build:docs && corepack pnpm run preview -- --host 127.0.0.1',
 		port: 4173,
-		reuseExistingServer: !process.env.CI
+		reuseExistingServer: false
 	},
 	use: { baseURL: 'http://127.0.0.1:4173' }
 });

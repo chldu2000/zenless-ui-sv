@@ -1,22 +1,26 @@
 <script lang="ts">
 	import { onDestroy, type Snippet } from 'svelte';
 	import type { HTMLButtonAttributes } from 'svelte/elements';
-	import { getMenu, type NavigationValue } from './navigation-context.js';
+	import { getZenlessContext } from './context.js';
+	import { getMenu, getSubMenu, type NavigationValue } from './navigation-context.js';
 
 	export interface ZenlessMenuItemProps extends Omit<
 		HTMLButtonAttributes,
 		'value' | 'name' | 'onselect'
 	> {
 		children?: Snippet;
-		name: NavigationValue;
+		name?: NavigationValue;
+		icon?: string;
 		title?: string;
 		disabled?: boolean;
 		onselect?: (value: NavigationValue) => void;
 	}
 
+	const uid = $props.id();
 	let {
 		children,
-		name,
+		name = uid,
+		icon,
 		title = '',
 		disabled = false,
 		onselect,
@@ -24,10 +28,17 @@
 		...rest
 	}: ZenlessMenuItemProps = $props();
 	const menu = getMenu();
+	const submenu = getSubMenu();
+	const zenless = getZenlessContext();
 	const token = Symbol('menu-item');
-	const active = $derived(menu?.value === name);
+	const active = $derived(menu?.isActive(name) ?? false);
 	const tabStop = $derived(menu?.isTabStop(token, name) ?? true);
-	menu?.registerItem(token, () => disabled);
+	menu?.registerItem(
+		token,
+		() => name,
+		() => submenu?.name,
+		() => disabled
+	);
 	onDestroy(() => menu?.unregisterItem(token));
 
 	function select() {
@@ -38,7 +49,13 @@
 </script>
 
 <button
-	class={['z-menu__item', active && 'is-active', disabled && 'is-disabled', className]
+	class={[
+		'z-menu__item',
+		zenless.isBold && 'is-bold',
+		active && 'is-active',
+		disabled && 'is-disabled',
+		className
+	]
 		.filter(Boolean)
 		.join(' ')}
 	type="button"
@@ -50,5 +67,7 @@
 	onclick={select}
 	{...rest}
 >
-	{#if children}{@render children()}{:else}{title}{/if}
+	{#if icon}<i class={`z-menu__icon z-icon-${icon}`} aria-hidden="true"></i>{/if}
+	{#if title}<span>{title}</span>{/if}
+	{@render children?.()}
 </button>

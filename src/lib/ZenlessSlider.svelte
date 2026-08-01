@@ -2,6 +2,7 @@
 	import type { HTMLAttributes } from 'svelte/elements';
 	import type { Attachment } from 'svelte/attachments';
 	import { pointerDrag } from './actions/index.js';
+	import ZenlessTooltip from './ZenlessTooltip.svelte';
 
 	export interface ZenlessSliderProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onchange'> {
 		value?: number;
@@ -62,47 +63,52 @@
 		}}
 	>
 		<div class="z-slider__track" style:width={`${percent}%`}></div>
-		<button
-			class:dragging
-			class="z-slider__handle"
-			type="button"
-			role="slider"
-			aria-valuemin={min}
-			aria-valuemax={max}
-			aria-valuenow={value}
-			aria-valuetext={typeof tooltip === 'function' ? tooltip(value) : String(value)}
-			{disabled}
-			style:left={`${percent}%`}
-			title={tooltip ? (typeof tooltip === 'function' ? tooltip(value) : String(value)) : undefined}
-			onkeydown={(event) => {
-				if (event.key === 'ArrowRight' || event.key === 'ArrowUp') {
-					event.preventDefault();
-					adjust(step);
-				} else if (event.key === 'ArrowLeft' || event.key === 'ArrowDown') {
-					event.preventDefault();
-					adjust(-step);
-				} else if (event.key === 'Home') {
-					event.preventDefault();
-					value = min;
-					onchange?.(value);
-				} else if (event.key === 'End') {
-					event.preventDefault();
-					value = max;
-					onchange?.(value);
-				}
-			}}
-			use:pointerDrag={{
-				disabled,
-				onStart: (event) => {
-					dragging = true;
-					setFromX(event.x);
-				},
-				onMove: (event) => setFromX(event.x),
-				onEnd: (event) => {
-					setFromX(event.x, true);
-					dragging = false;
-				}
-			}}
-		></button>
+		<ZenlessTooltip
+			class={['z-slider__handle', dragging && 'dragging'].filter(Boolean).join(' ')}
+			content={typeof tooltip === 'function' ? tooltip(value) : String(value)}
+			disabled={!tooltip}
+			style={`left: ${percent}%`}
+		>
+			<button
+				class="z-slider__handle-control"
+				type="button"
+				role="slider"
+				aria-label="Slider"
+				aria-valuemin={min}
+				aria-valuemax={max}
+				aria-valuenow={value}
+				aria-valuetext={typeof tooltip === 'function' ? tooltip(value) : String(value)}
+				{disabled}
+				onkeydown={(event) => {
+					if (event.key === 'ArrowRight' || event.key === 'ArrowUp') {
+						event.preventDefault();
+						adjust(step);
+					} else if (event.key === 'ArrowLeft' || event.key === 'ArrowDown') {
+						event.preventDefault();
+						adjust(-step);
+					} else if (event.key === 'Home') {
+						event.preventDefault();
+						value = min;
+						onchange?.(value);
+					} else if (event.key === 'End') {
+						event.preventDefault();
+						value = max;
+						onchange?.(value);
+					}
+				}}
+				use:pointerDrag={{
+					disabled,
+					onStart: (event) => {
+						dragging = true;
+						setFromX(event.x);
+					},
+					onMove: (event) => setFromX(event.x),
+					onEnd: (event) => {
+						setFromX(event.x, true);
+						dragging = false;
+					}
+				}}
+			></button>
+		</ZenlessTooltip>
 	</div>
 </div>

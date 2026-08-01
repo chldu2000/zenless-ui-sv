@@ -9,7 +9,7 @@ describe('navigation and selection components', () => {
 		render(NavigationFixture);
 		expect(screen.getByText('First content')).toBeVisible();
 		await fireEvent.click(screen.getByRole('button', { name: 'Second' }));
-		expect(screen.queryByText('First content')).not.toBeInTheDocument();
+		expect(screen.getByText('First content')).not.toBeVisible();
 		expect(screen.getByText('Second content')).toBeVisible();
 		expect(screen.getByTestId('collapse-value')).toHaveTextContent('second');
 		await fireEvent.click(screen.getByRole('button', { name: 'Disabled' }));
@@ -50,7 +50,7 @@ describe('navigation and selection components', () => {
 		expect(trigger).toHaveFocus();
 		await fireEvent.click(trigger);
 		await fireEvent.pointerDown(screen.getByTestId('outside'));
-		expect(screen.getByRole('menuitem', { name: 'Edit', hidden: true })).not.toBeVisible();
+		expect(screen.getByText('Edit')).not.toBeVisible();
 		await fireEvent.click(trigger);
 		await fireEvent.keyDown(document, { key: 'Escape' });
 		expect(trigger).toHaveFocus();
@@ -65,11 +65,12 @@ describe('navigation and selection components', () => {
 		await fireEvent.keyDown(document.activeElement as Element, { key: 'ArrowDown' });
 		expect(screen.getByRole('option', { name: 'Seven' })).toHaveFocus();
 		await fireEvent.keyDown(document.activeElement as Element, { key: 'Enter' });
-		expect(select).toHaveTextContent('Seven');
+		expect(select).toHaveValue('Seven');
 		expect(screen.getByTestId('select-value')).toHaveTextContent('7');
 		expect(select).toHaveFocus();
 		await fireEvent.click(screen.getByRole('button', { name: 'Clear selection' }));
-		expect(select).toHaveTextContent('Choose agent');
+		expect(select).toHaveValue('');
+		expect(select).toHaveAttribute('placeholder', 'Choose agent');
 		await fireEvent.click(screen.getByRole('button', { name: 'Toggle dynamic' }));
 		await fireEvent.click(select);
 		expect(screen.queryByRole('option', { name: 'Seven' })).not.toBeInTheDocument();

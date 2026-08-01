@@ -12,15 +12,26 @@
 		message: string;
 		type: ZenlessMessageType;
 		timer: number | undefined;
+		closingTimer: number | undefined;
+		closing: boolean;
 	}
 	let { children }: Props = $props();
 	let entries: Entry[] = $state([]);
 
-	function close(id: symbol) {
+	function remove(id: symbol) {
 		const index = entries.findIndex((entry) => entry.id === id);
 		if (index === -1) return;
 		const [entry] = entries.splice(index, 1);
 		if (entry.timer !== undefined) window.clearTimeout(entry.timer);
+		if (entry.closingTimer !== undefined) window.clearTimeout(entry.closingTimer);
+	}
+
+	function close(id: symbol) {
+		const entry = entries.find((item) => item.id === id);
+		if (!entry || entry.closing) return;
+		entry.closing = true;
+		if (entry.timer !== undefined) window.clearTimeout(entry.timer);
+		entry.closingTimer = window.setTimeout(() => remove(id), 420);
 	}
 
 	setMessageHost({
@@ -29,7 +40,9 @@
 				id: Symbol('message'),
 				message: options.message,
 				type: options.type ?? 'info',
-				timer: undefined
+				timer: undefined,
+				closingTimer: undefined,
+				closing: false
 			};
 			entries.push(entry);
 			entry.timer = window.setTimeout(() => close(entry.id), options.duration ?? 3000);
@@ -37,7 +50,10 @@
 		}
 	});
 	onDestroy(() => {
-		for (const entry of entries) if (entry.timer !== undefined) window.clearTimeout(entry.timer);
+		for (const entry of entries) {
+			if (entry.timer !== undefined) window.clearTimeout(entry.timer);
+			if (entry.closingTimer !== undefined) window.clearTimeout(entry.closingTimer);
+		}
 	});
 </script>
 
@@ -45,7 +61,7 @@
 <div class="z-message-host" aria-live="polite">
 	{#each entries as entry, index (entry.id)}
 		<div class="z-message-host__item" style:top={`${23 + index * 44}px`}>
-			<ZenlessMessage message={entry.message} type={entry.type} />
+			<ZenlessMessage message={entry.message} type={entry.type} closing={entry.closing} />
 		</div>
 	{/each}
 </div>

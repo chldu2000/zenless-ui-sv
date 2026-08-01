@@ -1,12 +1,15 @@
 <script lang="ts">
-	import { onDestroy, type Snippet } from 'svelte';
+	import { onDestroy, untrack, type Snippet } from 'svelte';
 	import type { HTMLAttributes } from 'svelte/elements';
-	import { getMenu, setSubMenu } from './navigation-context.js';
+	import { getZenlessContext } from './context.js';
+	import { getMenu, setSubMenu, type NavigationValue } from './navigation-context.js';
 
 	export interface ZenlessSubMenuProps extends HTMLAttributes<HTMLDivElement> {
 		children?: Snippet;
 		title?: string;
 		titleContent?: Snippet;
+		name?: NavigationValue;
+		icon?: string;
 		open?: boolean;
 		disabled?: boolean;
 		onopenchange?: (open: boolean) => void;
@@ -17,6 +20,8 @@
 		children,
 		title = '',
 		titleContent,
+		name = uid,
+		icon,
 		open = $bindable(false),
 		disabled = false,
 		onopenchange,
@@ -24,13 +29,19 @@
 		...rest
 	}: ZenlessSubMenuProps = $props();
 	const menu = getMenu();
+	const zenless = getZenlessContext();
 	const token = Symbol('submenu');
+	const active = $derived(menu?.isActive(name) ?? false);
 	const contentId = `${uid}-submenu`;
 	setSubMenu({
 		get open() {
 			return open;
+		},
+		get name() {
+			return name;
 		}
 	});
+	if (menu?.isSubmenuInitiallyOpen(untrack(() => name))) open = true;
 	menu?.registerSubmenu(token, () => {
 		if (open) {
 			open = false;
@@ -57,9 +68,16 @@
 	}
 </script>
 
-<div class={['z-menu__submenu', className].filter(Boolean).join(' ')} {...rest}>
+<div class={['z-menu__group', className].filter(Boolean).join(' ')} {...rest}>
 	<button
-		class={['z-menu__item', disabled && 'is-disabled'].filter(Boolean).join(' ')}
+		class={[
+			'z-menu__item',
+			zenless.isBold && 'is-bold',
+			active && 'is-active',
+			disabled && 'is-disabled'
+		]
+			.filter(Boolean)
+			.join(' ')}
 		type="button"
 		role="menuitem"
 		aria-expanded={open}
@@ -70,10 +88,11 @@
 		onclick={toggle}
 		onkeydown={keydown}
 	>
-		{#if titleContent}{@render titleContent()}{:else}{title}{/if}
-		<i class="z-icon-caret-bottom" aria-hidden="true"></i>
+		{#if icon}<i class={`z-menu__icon z-icon-${icon}`} aria-hidden="true"></i>{/if}
+		{#if title}<span>{title}</span>{/if}
+		{@render titleContent?.()}
 	</button>
-	<div id={contentId} class:is-open={open} class="z-menu__sub" role="menu" hidden={!open}>
+	<div id={contentId} class:is-open={open} class="z-menu__sub" role="menu" aria-hidden={!open}>
 		{@render children?.()}
 	</div>
 </div>

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import type { HTMLAttributes } from 'svelte/elements';
+	import { getZenlessContext } from './context.js';
 	import { setTabs, type NavigationValue, type TabRegistration } from './navigation-context.js';
 
 	export type ZenlessTabsPlacement =
@@ -16,12 +17,13 @@
 	let {
 		children,
 		value = $bindable<NavigationValue | undefined>(undefined),
-		placement = 'top',
+		placement = 'top-right',
 		onchange,
 		class: className,
 		...rest
 	}: ZenlessTabsProps = $props();
 	let panels: TabRegistration[] = $state([]);
+	const zenless = getZenlessContext();
 
 	function select(name: NavigationValue) {
 		const panel = panels.find((item) => item.name === name);
@@ -72,7 +74,6 @@
 </script>
 
 <div class={['z-tabs', `at-${placement}`, className].filter(Boolean).join(' ')} {...rest}>
-	<div class="z-tabs__content">{@render children?.()}</div>
 	<div
 		class="z-tabs__header"
 		role="tablist"
@@ -83,8 +84,9 @@
 		{#each panels as panel (panel.token)}
 			<button
 				id={`${uid}-tab-${String(panel.name)}`}
-				class:disabled={panel.disabled}
+				class:is-bold={zenless.isBold}
 				class:is-active={value === panel.name}
+				class:is-disabled={panel.disabled}
 				class="z-tabs__item"
 				type="button"
 				role="tab"
@@ -99,4 +101,5 @@
 			</button>
 		{/each}
 	</div>
+	<div class="z-tabs__content">{@render children?.()}</div>
 </div>

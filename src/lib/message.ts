@@ -29,7 +29,18 @@ function show(payload: ZenlessMessagePayload, forcedType?: ZenlessMessageType): 
 	const close = () => {
 		if (closed) return;
 		closed = true;
-		void unmount(component, { outro: true }).finally(() => target.remove());
+		const element = target.querySelector<HTMLElement>('.z-message');
+		element?.classList.add('hidden');
+		let removed = false;
+		const remove = () => {
+			if (removed) return;
+			removed = true;
+			void unmount(component, { outro: true }).finally(() => target.remove());
+		};
+		const animations = element?.getAnimations() ?? [];
+		if (animations.length)
+			void Promise.allSettled(animations.map((animation) => animation.finished)).then(remove);
+		window.setTimeout(remove, 500);
 	};
 	const timer = window.setTimeout(close, options.duration ?? 3000);
 	return () => {

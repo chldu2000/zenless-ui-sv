@@ -65,6 +65,24 @@
 			)
 		);
 	}
+	function handleKeydown(event: KeyboardEvent, axis: 'x' | 'y') {
+		if (!wrap) return;
+		const amount =
+			event.key === 'PageUp' || event.key === 'PageDown'
+				? axis === 'x'
+					? wrap.clientWidth
+					: wrap.clientHeight
+				: 40;
+		const direction =
+			event.key === 'ArrowLeft' || event.key === 'ArrowUp' || event.key === 'PageUp'
+				? -1
+				: event.key === 'ArrowRight' || event.key === 'ArrowDown' || event.key === 'PageDown'
+					? 1
+					: 0;
+		if (!direction) return;
+		event.preventDefault();
+		wrap.scrollBy({ [axis === 'x' ? 'left' : 'top']: direction * amount });
+	}
 	function dragVertical(y: number) {
 		if (!wrap) return;
 		const rect = wrap.getBoundingClientRect();
@@ -90,8 +108,8 @@
 		class="z-scrollbar__wrap"
 		onscroll={(event) => {
 			if (wrap) {
-				moveX = wrap.scrollWidth ? (wrap.scrollLeft / wrap.scrollWidth) * 100 : 0;
-				moveY = wrap.scrollHeight ? (wrap.scrollTop / wrap.scrollHeight) * 100 : 0;
+				moveX = wrap.clientWidth ? (wrap.scrollLeft / wrap.clientWidth) * 100 : 0;
+				moveY = wrap.clientHeight ? (wrap.scrollTop / wrap.clientHeight) * 100 : 0;
 			}
 			onscroll?.(event);
 		}}
@@ -103,31 +121,51 @@
 		>
 			{@render children?.()}
 		</div>
+		{#if !hideScroll && (fixedX || overflowX)}
+			<div
+				class="z-scrollbar__bar z-scrollbar__horizontal"
+				style:right={fixedY ? '25px' : undefined}
+			>
+				<i class="z-icon-caret-left" aria-hidden="true"></i>
+				<div class="z-scrollbar__thumb">
+					<button
+						type="button"
+						aria-label="Horizontal scrollbar"
+						class="z-scrollbar__track"
+						style:width={`${sizeX}%`}
+						style:transform={`translateX(${moveX}%)`}
+						onkeydown={(event) => handleKeydown(event, 'x')}
+						use:pointerDrag={{
+							onStart: (event) => dragHorizontal(event.x),
+							onMove: (event) => dragHorizontal(event.x)
+						}}
+					></button>
+				</div>
+				<i class="z-icon-caret-right" aria-hidden="true"></i>
+			</div>
+		{/if}
+		{#if !hideScroll && (fixedY || overflowY)}
+			<div
+				class="z-scrollbar__bar z-scrollbar__vertical"
+				style:bottom={fixedX ? '25px' : undefined}
+			>
+				<i class="z-icon-caret-top" aria-hidden="true"></i>
+				<div class="z-scrollbar__thumb">
+					<button
+						type="button"
+						aria-label="Vertical scrollbar"
+						class="z-scrollbar__track"
+						style:height={`${sizeY}%`}
+						style:transform={`translateY(${moveY}%)`}
+						onkeydown={(event) => handleKeydown(event, 'y')}
+						use:pointerDrag={{
+							onStart: (event) => dragVertical(event.y),
+							onMove: (event) => dragVertical(event.y)
+						}}
+					></button>
+				</div>
+				<i class="z-icon-caret-bottom" aria-hidden="true"></i>
+			</div>
+		{/if}
 	</div>
-	{#if !hideScroll && (fixedX || overflowX)}<div class="z-scrollbar__bar z-scrollbar__horizontal">
-			<button
-				type="button"
-				aria-label="Horizontal scrollbar"
-				class="z-scrollbar__track"
-				style:width={`${sizeX}%`}
-				style:transform={`translateX(${moveX}%)`}
-				use:pointerDrag={{
-					onStart: (event) => dragHorizontal(event.x),
-					onMove: (event) => dragHorizontal(event.x)
-				}}
-			></button>
-		</div>{/if}
-	{#if !hideScroll && (fixedY || overflowY)}<div class="z-scrollbar__bar z-scrollbar__vertical">
-			<button
-				type="button"
-				aria-label="Vertical scrollbar"
-				class="z-scrollbar__track"
-				style:height={`${sizeY}%`}
-				style:transform={`translateY(${moveY}%)`}
-				use:pointerDrag={{
-					onStart: (event) => dragVertical(event.y),
-					onMove: (event) => dragVertical(event.y)
-				}}
-			></button>
-		</div>{/if}
 </div>

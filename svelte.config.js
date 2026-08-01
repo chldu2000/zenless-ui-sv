@@ -8,6 +8,9 @@ const config = {
 		runes: true
 	},
 	kit: {
+		files: {
+			assets: 'public'
+		},
 		adapter: adapter({
 			pages: 'build',
 			assets: 'build',

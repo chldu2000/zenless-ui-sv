@@ -58,7 +58,9 @@
 		</span>
 		<i class="z-icon-caret-bottom" aria-hidden="true"></i>
 	</button>
-	{#if active}
-		<div class="z-collapse-item__content" id={contentId}>{@render children?.()}</div>
-	{/if}
+	<div class="z-collapse-item__wrap">
+		<div class="z-collapse-item__content" id={contentId} hidden={!active}>
+			{@render children?.()}
+		</div>
+	</div>
 </div>

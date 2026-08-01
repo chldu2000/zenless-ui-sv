@@ -6,6 +6,8 @@
 	import { getZenlessContext } from './context.js';
 	import { setSelect, type OptionRegistration, type SelectValue } from './navigation-context.js';
 	import type { ZenlessSize } from './types.js';
+	import ZenlessInput from './ZenlessInput.svelte';
+	import ZenlessScrollbar from './ZenlessScrollbar.svelte';
 
 	export interface ZenlessSelectProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onchange'> {
 		children?: Snippet;
@@ -18,6 +20,7 @@
 		disabled?: boolean;
 		name?: string;
 		onchange?: (value: SelectValue | undefined) => void;
+		onclear?: () => void;
 		onopenchange?: (open: boolean) => void;
 	}
 
@@ -33,6 +36,7 @@
 		disabled = false,
 		name,
 		onchange,
+		onclear,
 		onopenchange,
 		class: className,
 		...rest
@@ -40,12 +44,12 @@
 	const zenless = getZenlessContext();
 	let options: OptionRegistration[] = $state([]);
 	let open = $state(false);
-	let triggerElement: HTMLButtonElement | undefined;
+	let rootElement: HTMLDivElement | undefined;
 	let listboxElement: HTMLDivElement | undefined;
-	const captureTrigger: Attachment<HTMLButtonElement> = (node) => {
-		triggerElement = node;
+	const captureRoot: Attachment<HTMLDivElement> = (node) => {
+		rootElement = node;
 		return () => {
-			if (triggerElement === node) triggerElement = undefined;
+			if (rootElement === node) rootElement = undefined;
 		};
 	};
 	const captureListbox: Attachment<HTMLDivElement> = (node) => {
@@ -55,7 +59,11 @@
 		};
 	};
 	const selected = $derived(options.find((option) => Object.is(option.value, value)));
+	const selectedLabel = $derived(selected?.label ?? (value === undefined ? '' : String(value)));
 	const emptyLabel = $derived(emptyText ?? zenless.locale.messages.select.empty);
+	function focusTrigger() {
+		rootElement?.querySelector<HTMLInputElement>('.z-select__input > .z-input__inner')?.focus();
+	}
 
 	function setOpen(next: boolean, restoreFocus = false) {
 		if (disabled || open === next) return;
@@ -64,7 +72,7 @@
 		if (next) {
 			void tick().then(() => (selected ?? options.find((option) => !option.disabled))?.focus());
 		} else if (restoreFocus) {
-			void tick().then(() => triggerElement?.focus());
+			void tick().then(focusTrigger);
 		}
 	}
 
@@ -121,6 +129,7 @@
 </script>
 
 <div
+	{@attach captureRoot}
 	class={[
 		'z-select',
 		size && `z-select--${size}`,
@@ -134,65 +143,76 @@
 	use:escapeDismiss={() => open && setOpen(false, true)}
 	{...rest}
 >
-	{#if name}<input type="hidden" {name} value={value === undefined ? '' : String(value)} />{/if}
-	<div class="z-select__control">
-		<button
-			{@attach captureTrigger}
+	<div
+		class={['z-dropdown', 'z-select__wrap', size && `z-dropdown--${size}`, open && 'is-visible']
+			.filter(Boolean)
+			.join(' ')}
+	>
+		<ZenlessInput
 			class="z-select__input"
-			type="button"
+			value={selectedLabel}
+			{size}
+			{name}
+			{disabled}
+			{clearable}
+			clearAriaLabel="Clear selection"
+			readonly
+			{placeholder}
 			role="combobox"
 			aria-haspopup="listbox"
 			aria-expanded={open}
 			aria-controls={`${uid}-listbox`}
-			{disabled}
-			onclick={() => setOpen(!open)}
+			onclick={() => setOpen(true)}
+			onclear={() => {
+				value = undefined;
+				onchange?.(undefined);
+				onclear?.();
+			}}
 			onkeydown={(event) => {
 				if (event.key === 'Enter' || event.key === ' ') {
 					event.preventDefault();
-					setOpen(!open);
+					setOpen(true);
+				} else if (event.key === 'Escape') {
+					setOpen(false);
 				} else move(event);
 			}}
 		>
-			<span class:placeholder={!selected}>{selected?.label ?? placeholder}</span>
-			<i class="z-select__arrow z-icon-caret-bottom" aria-hidden="true"></i>
-		</button>
-		{#if clearable && value !== undefined && !disabled}
-			<button
-				class="z-select__clear"
-				type="button"
-				aria-label="Clear selection"
-				onclick={() => {
-					value = undefined;
-					onchange?.(undefined);
-					triggerElement?.focus();
-				}}>×</button
+			{#snippet suffix()}<i class="z-icon-caret-bottom z-select__arrow" aria-hidden="true"
+				></i>{/snippet}
+		</ZenlessInput>
+		<div
+			class="z-dropdown__content"
+			aria-hidden={!open}
+			style:visibility={open ? 'visible' : 'hidden'}
+		>
+			<ZenlessScrollbar
+				class="z-select__options"
+				hideScroll
+				resizable={false}
+				id={`${uid}-listbox`}
+				role="listbox"
+				tabindex={-1}
+				onkeydown={(event) => {
+					if (event.key === 'Enter' || event.key === ' ') {
+						if (
+							document.activeElement instanceof HTMLButtonElement &&
+							document.activeElement.getAttribute('role') === 'option'
+						) {
+							event.preventDefault();
+							document.activeElement.click();
+						}
+					} else move(event);
+				}}
 			>
-		{/if}
-	</div>
-	<div
-		{@attach captureListbox}
-		id={`${uid}-listbox`}
-		class="z-select__options"
-		role="listbox"
-		tabindex="-1"
-		hidden={!open}
-		onkeydown={(event) => {
-			if (event.key === 'Enter' || event.key === ' ') {
-				if (
-					document.activeElement instanceof HTMLButtonElement &&
-					document.activeElement.getAttribute('role') === 'option'
-				) {
-					event.preventDefault();
-					document.activeElement.click();
-				}
-			} else move(event);
-		}}
-	>
-		{@render children?.()}
-		{#if options.length === 0}
-			<div class="z-select__empty">
-				{#if empty}{@render empty()}{:else}{emptyLabel}{/if}
-			</div>
-		{/if}
+				<div {@attach captureListbox}>
+					{@render children?.()}
+					{#if options.length === 0}
+						<div class="z-select__empty">
+							{#if empty}{@render empty()}{:else}{emptyLabel}{/if}
+						</div>
+					{/if}
+				</div>
+			</ZenlessScrollbar>
+		</div>
 	</div>
 </div>

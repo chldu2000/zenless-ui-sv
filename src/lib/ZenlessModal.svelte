@@ -3,6 +3,8 @@
 	import type { Attachment } from 'svelte/attachments';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { focusTrap, portal } from './actions/index.js';
+	import ZenlessButton from './ZenlessButton.svelte';
+	import ZenlessScrollbar from './ZenlessScrollbar.svelte';
 	import { getZenlessContext } from './context.js';
 	import { lockBodyScroll } from './internal/scroll-lock.js';
 	import { getOverlayHost, type ZenlessOverlayHostValue } from './overlay/context.js';
@@ -72,7 +74,6 @@
 	}
 	function cancel() {
 		oncancel?.();
-		close();
 	}
 </script>
 
@@ -116,23 +117,34 @@
 					<div class="z-modal__title">
 						{#if titleContent}{@render titleContent()}{:else}{title}{/if}
 					</div>
-					{#if closable}<button
+					{#if (mode === 'drawer' || !fullscreen) && closable}<ZenlessButton
 							class="z-modal__close"
-							type="button"
+							type="danger"
+							size="small"
+							circle
+							icon="close"
 							aria-label={zenless.locale.messages.common.close}
-							onclick={close}>×</button
-						>{/if}
+							onclick={close}
+						/>{/if}
 				</div>
 			{/if}
-			<div class="z-modal__body"><div class="z-modal__content">{@render children?.()}</div></div>
+			<ZenlessScrollbar class="z-modal__body" fixed={false}>
+				<div class="z-modal__content">{@render children?.()}</div>
+			</ZenlessScrollbar>
 			{#if showFooter}
 				<div class="z-modal__footer">
 					{#if footer}{@render footer()}{:else}
-						{#if showCancel}<button class="z-button z-modal__cancel" type="button" onclick={cancel}
-								>{cancelText ?? zenless.locale.messages.common.cancel}</button
+						{#if showCancel}<ZenlessButton
+								class="z-modal__cancel"
+								icon={{ error: 'danger' }}
+								onclick={cancel}
+								>{cancelText ?? zenless.locale.messages.common.cancel}</ZenlessButton
 							>{/if}
-						<button class="z-button z-modal__confirm" type="button" onclick={() => onconfirm?.()}
-							>{confirmText ?? zenless.locale.messages.common.confirm}</button
+						<ZenlessButton
+							class="z-modal__confirm"
+							icon={{ success: 'success' }}
+							onclick={() => onconfirm?.()}
+							>{confirmText ?? zenless.locale.messages.common.confirm}</ZenlessButton
 						>
 					{/if}
 				</div>

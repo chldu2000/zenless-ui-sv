@@ -11,7 +11,11 @@
 	let { name, size, color, class: className, style, ...restProps }: Props = $props();
 	const namedColor = $derived(zenlessColors.includes(color as ZenlessColor));
 	const iconStyle = $derived(
-		[size !== undefined ? `font-size: ${typeof size === 'number' ? `${size}px` : size}` : '', style]
+		[
+			size !== undefined ? `font-size: ${typeof size === 'number' ? `${size}px` : size}` : '',
+			color && !namedColor ? `color: ${color}` : '',
+			style
+		]
 			.filter(Boolean)
 			.join('; ')
 	);

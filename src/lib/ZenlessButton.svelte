@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Snippet } from 'svelte';
+	import { onDestroy, type Snippet } from 'svelte';
 	import type { HTMLButtonAttributes } from 'svelte/elements';
 	import ZenlessIcon from './ZenlessIcon.svelte';
 	import { getZenlessContext } from './context.js';
@@ -42,6 +42,8 @@
 	}: Props = $props();
 
 	const zenless = getZenlessContext();
+	let isActive = $state(false);
+	let isInactive = $state(false);
 	const buttonIcon = $derived(
 		typeof icon === 'string'
 			? { name: icon }
@@ -49,12 +51,34 @@
 				? { name: Object.keys(icon)[0], color: Object.values(icon)[0] }
 				: undefined
 	);
+
+	function finishPress() {
+		isActive = false;
+		isInactive = false;
+	}
+
+	function release() {
+		if (!isActive || isInactive) return;
+		isInactive = true;
+		document.removeEventListener('mouseup', release);
+	}
+
+	function press(event: MouseEvent) {
+		if (event.button !== 0 || disabled || loading || isActive) return;
+		isActive = true;
+		document.addEventListener('mouseup', release);
+	}
+
+	onDestroy(() => {
+		if (typeof document !== 'undefined') document.removeEventListener('mouseup', release);
+	});
 </script>
 
 <button
 	class={[
 		'z-button',
 		zenless.isBold && 'is-bold',
+		zenless.isItalic && 'is-italic',
 		size && `z-button--${size}`,
 		`z-button--${type ?? 'default'}`,
 		highlight && 'z-button--highlight',
@@ -63,15 +87,26 @@
 		round && 'z-button--round',
 		circle && 'z-button--circle',
 		(disabled || loading) && 'z-button--disabled',
+		isActive && 'z-button--active',
 		className
 	]
 		.filter(Boolean)
 		.join(' ')}
 	disabled={disabled || loading}
 	type={nativeType}
+	onmousedown={press}
 	{onclick}
 	{...restProps}
 >
+	{#if isActive}
+		<span
+			class:is-fadeout={isInactive}
+			class="z-button--active__bg"
+			onanimationend={(event) => {
+				if (event.animationName === 'z_ani_btn_inactive_bg') finishPress();
+			}}
+		></span>
+	{/if}
 	{#if loading}
 		<i class="z-button__icon is-loading z-icon-loading" aria-label="Loading"></i>
 	{:else if buttonIcon?.name}

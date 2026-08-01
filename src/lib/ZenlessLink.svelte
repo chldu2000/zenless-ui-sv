@@ -7,6 +7,7 @@
 	interface Props extends Omit<HTMLAnchorAttributes, 'onclick'> {
 		children?: Snippet;
 		type?: ZenlessColor;
+		icon?: string;
 		highlight?: boolean;
 		underline?: boolean;
 		disabled?: boolean;
@@ -16,6 +17,7 @@
 	let {
 		children,
 		type = 'default',
+		icon: _icon,
 		highlight = false,
 		underline = false,
 		disabled = false,
@@ -27,6 +29,8 @@
 
 	const zenless = getZenlessContext();
 	function handleClick(event: MouseEvent) {
+		// Kept for API compatibility: the Vue component exposes but does not render `icon`.
+		void _icon;
 		if (disabled) {
 			event.preventDefault();
 			return;

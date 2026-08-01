@@ -16,17 +16,17 @@ export const zenlessColors = [
 ] as const;
 export const zenlessPlacements = [
 	'top',
-	'top-start',
-	'top-end',
+	'top-left',
+	'top-right',
 	'right',
-	'right-start',
-	'right-end',
+	'right-top',
+	'right-bottom',
 	'bottom',
-	'bottom-start',
-	'bottom-end',
+	'bottom-left',
+	'bottom-right',
 	'left',
-	'left-start',
-	'left-end'
+	'left-top',
+	'left-bottom'
 ] as const;
 
 export type ZenlessSize = (typeof zenlessSizes)[number];

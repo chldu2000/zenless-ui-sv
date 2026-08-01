@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onDestroy, type Snippet } from 'svelte';
+	import type { Attachment } from 'svelte/attachments';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { getTabs, type NavigationValue } from './navigation-context.js';
 
@@ -26,6 +27,10 @@
 	const tabs = getTabs();
 	const token = Symbol('tab-panel');
 	const active = $derived(tabs?.value === name);
+	let loaded = $state(false);
+	const rememberLoaded: Attachment<HTMLDivElement> = () => {
+		loaded = true;
+	};
 
 	if (tabs) {
 		tabs.register({
@@ -47,8 +52,9 @@
 	}
 </script>
 
-{#if !lazy || active}
+{#if !lazy || active || loaded}
 	<div
+		{@attach rememberLoaded}
 		class={['z-tab-panel', className].filter(Boolean).join(' ')}
 		role="tabpanel"
 		hidden={!active}

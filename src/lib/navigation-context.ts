@@ -29,9 +29,16 @@ export interface TabsContext {
 export interface MenuContext {
 	readonly value: NavigationValue | undefined;
 	readonly accordion: boolean;
-	registerItem: (token: symbol, disabled: () => boolean) => void;
+	registerItem: (
+		token: symbol,
+		name: () => NavigationValue,
+		parent: () => NavigationValue | undefined,
+		disabled: () => boolean
+	) => void;
 	unregisterItem: (token: symbol) => void;
 	isTabStop: (token: symbol, name: NavigationValue) => boolean;
+	isActive: (name: NavigationValue) => boolean;
+	isSubmenuInitiallyOpen: (name: NavigationValue) => boolean;
 	select: (name: NavigationValue) => void;
 	registerSubmenu: (token: symbol, close: () => void) => void;
 	unregisterSubmenu: (token: symbol) => void;
@@ -40,6 +47,7 @@ export interface MenuContext {
 
 export interface SubMenuContext {
 	readonly open: boolean;
+	readonly name: NavigationValue;
 }
 
 export interface DropdownContext {

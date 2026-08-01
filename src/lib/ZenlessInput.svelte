@@ -20,6 +20,7 @@
 		prefixIcon?: string;
 		suffixIcon?: string;
 		textAlign?: 'left' | 'center' | 'right';
+		clearAriaLabel?: string;
 		oninput?: (value: string) => void;
 		onchange?: (value: string) => void;
 		onclear?: () => void;
@@ -37,6 +38,7 @@
 		prefixIcon,
 		suffixIcon,
 		textAlign,
+		clearAriaLabel = 'Clear',
 		disabled = false,
 		readonly = false,
 		oninput,
@@ -115,7 +117,7 @@
 			{:else if showClear}<button
 					class="z-input__clear z-icon-error"
 					type="button"
-					aria-label="Clear"
+					aria-label={clearAriaLabel}
 					onclick={clear}
 				></button>
 			{:else if suffix}{@render suffix()}{:else if suffixIcon}<i class={`z-icon-${suffixIcon}`}

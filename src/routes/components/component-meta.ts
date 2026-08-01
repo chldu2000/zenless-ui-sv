@@ -30,8 +30,9 @@ export const componentProps: Record<string, string> = {
 	ZenlessDrawer:
 		'bind:open?: boolean = false；title/width/mask/maskClosable/closable/fullscreen/footer/cancel/confirm 配置同 Modal',
 	ZenlessDropdown:
-		'bind:open?: boolean = false；trigger?: hover | click = hover；disabled?: boolean；size?: ZenlessSize；hideOnCommand?: boolean = true',
-	ZenlessDropdownItem: 'value?: unknown；disabled?: boolean = false；原生 button attributes',
+		'bind:open?: boolean = false；trigger?: hover | click = hover；disabled?: boolean；size?: ZenlessSize；hideOnCommand?: boolean = true；ontrigger/onopenchange',
+	ZenlessDropdownItem:
+		'command?: unknown = 自动 ID；value?: unknown（Svelte 别名）；disabled?: boolean = false；原生 button attributes',
 	ZenlessForm:
 		'inline?: boolean = false；labelWidth?: string | number；labelPosition?: left | right | top；原生 form attributes',
 	ZenlessFormItem:
@@ -41,11 +42,12 @@ export const componentProps: Record<string, string> = {
 		'bind:value?: string | number = 空字符串；type?: text/password/email/number/search/tel/url；size/clearable/icons/textAlign；原生 input attributes',
 	ZenlessLink:
 		'href?: string；type?: ZenlessColor = default；highlight/underline/disabled?: boolean = false；原生 anchor attributes',
-	ZenlessMenu: 'bind:value?: NavigationValue；accordion?: boolean = false；原生 nav attributes',
+	ZenlessMenu:
+		'bind:value?: NavigationValue；accordion?: boolean = false；defaultOpen?: NavigationValue | NavigationValue[]；原生 nav attributes',
 	ZenlessMenuItem:
-		'name: NavigationValue；title?: string；disabled?: boolean = false；原生 button attributes',
+		'name?: NavigationValue = 自动 ID；icon/title?: string；disabled?: boolean = false；原生 button attributes',
 	ZenlessSubMenu:
-		'bind:open?: boolean = false；title?: string；disabled?: boolean = false；原生 div attributes',
+		'bind:open?: boolean = false；name?: NavigationValue = 自动 ID；icon/title?: string；disabled?: boolean = false；原生 div attributes',
 	ZenlessMessage:
 		'message?: string = 空字符串；type?: success | error | warning | info = info；closing?: boolean = false',
 	ZenlessMessageHost: 'children?: Snippet；队列 duration 默认 3000ms',
@@ -65,8 +67,9 @@ export const componentProps: Record<string, string> = {
 	ZenlessScrollbar:
 		'fixed?: boolean | { x?, y? } = { y: true }；hideScroll?: boolean = false；resizable?: boolean = true',
 	ZenlessSelect:
-		'bind:value?: SelectValue；size?: ZenlessSize；placeholder?: string = Select；clearable/disabled?: boolean；emptyText/name?: string',
-	ZenlessOption: 'value: SelectValue；label?: string = String(value)；disabled?: boolean = false',
+		'bind:value?: SelectValue；size?: ZenlessSize；placeholder?: string = Select；clearable/disabled?: boolean；emptyText/name?: string；onchange/onclear/onopenchange',
+	ZenlessOption:
+		'value?: SelectValue = 自动 ID；label?: SelectValue = String(value)；disabled?: boolean = false',
 	ZenlessSlider:
 		'bind:value?: number = 0；min?: number = 0；max?: number = 100；step?: number = 1；disabled?: boolean；tooltip?: boolean | formatter',
 	ZenlessSwitch: 'bind:checked?: boolean = false；disabled?: boolean；原生 input attributes',
@@ -75,7 +78,7 @@ export const componentProps: Record<string, string> = {
 	ZenlessTableColumn:
 		'prop: string；label?: string = 空字符串；width?: string | number；cell/header?: typed Snippet',
 	ZenlessTabs:
-		'bind:value?: NavigationValue；placement?: top | right | bottom | left = top；原生 div attributes',
+		'bind:value?: NavigationValue；placement?: top-left | top | top-right | bottom-left | bottom | bottom-right = top-right；原生 div attributes',
 	ZenlessTabPanel:
 		'name?: NavigationValue = 自动 ID；label?: string；disabled/lazy?: boolean = false',
 	ZenlessTag:
@@ -89,7 +92,7 @@ export const componentProps: Record<string, string> = {
 export const componentDocs: ComponentDocMeta[] = [
 	{
 		slug: 'backtop',
-		title: 'Backtop',
+		title: 'Backtop 返回顶部',
 		components: ['ZenlessBacktop'],
 		summary: '自定义滚动容器的返回顶部按钮。',
 		callbacks: 'onclick（原生）',
@@ -97,14 +100,14 @@ export const componentDocs: ComponentDocMeta[] = [
 	},
 	{
 		slug: 'badge',
-		title: 'Badge',
+		title: 'Badge 徽标',
 		components: ['ZenlessBadge'],
 		summary: '数字或文本角标。',
 		snippets: 'children'
 	},
 	{
 		slug: 'button',
-		title: 'Button',
+		title: 'Button 按钮',
 		components: ['ZenlessButton'],
 		summary: '主题按钮、图标、加载与禁用状态。',
 		callbacks: 'onclick',
@@ -113,14 +116,14 @@ export const componentDocs: ComponentDocMeta[] = [
 	},
 	{
 		slug: 'card',
-		title: 'Card',
+		title: 'Card 卡片',
 		components: ['ZenlessCard'],
 		summary: '标题、内容和操作区域容器。',
 		snippets: 'children'
 	},
 	{
 		slug: 'checkbox',
-		title: 'Checkbox',
+		title: 'Checkbox 多选框',
 		components: ['ZenlessCheckbox', 'ZenlessCheckboxGroup', 'ZenlessCheckboxButton'],
 		summary: '复选框及约束分组。',
 		bindable: 'bind:checked / bind:value',
@@ -129,7 +132,7 @@ export const componentDocs: ComponentDocMeta[] = [
 	},
 	{
 		slug: 'collapse',
-		title: 'Collapse',
+		title: 'Collapse 折叠面板',
 		components: ['ZenlessCollapse', 'ZenlessCollapseItem'],
 		summary: '支持手风琴和动态面板的折叠容器。',
 		bindable: 'bind:value',
@@ -139,7 +142,7 @@ export const componentDocs: ComponentDocMeta[] = [
 	},
 	{
 		slug: 'drawer',
-		title: 'Drawer',
+		title: 'Drawer 抽屉',
 		components: ['ZenlessDrawer'],
 		summary: '共享 Modal 焦点和关闭协议的侧边抽屉。',
 		bindable: 'bind:open',
@@ -149,7 +152,7 @@ export const componentDocs: ComponentDocMeta[] = [
 	},
 	{
 		slug: 'dropdown',
-		title: 'Dropdown',
+		title: 'Dropdown 下拉菜单',
 		components: ['ZenlessDropdown', 'ZenlessDropdownItem'],
 		summary: '点击或悬停触发的命令菜单。',
 		bindable: 'bind:open',
@@ -159,20 +162,20 @@ export const componentDocs: ComponentDocMeta[] = [
 	},
 	{
 		slug: 'form',
-		title: 'Form',
+		title: 'Form 表单',
 		components: ['ZenlessForm', 'ZenlessFormItem'],
 		summary: '标签布局和原生表单语义。',
 		snippets: 'children / labelContent'
 	},
 	{
 		slug: 'icon',
-		title: 'Icon',
+		title: 'Icon 图标',
 		components: ['ZenlessIcon'],
 		summary: '图标字体封装与可访问名称。'
 	},
 	{
 		slug: 'input',
-		title: 'Input',
+		title: 'Input 输入框',
 		components: ['ZenlessInput'],
 		summary: '可清空、密码切换和原生属性转发。',
 		bindable: 'bind:value',
@@ -181,7 +184,7 @@ export const componentDocs: ComponentDocMeta[] = [
 	},
 	{
 		slug: 'link',
-		title: 'Link',
+		title: 'Link 链接',
 		components: ['ZenlessLink'],
 		summary: '主题链接和禁用状态。',
 		snippets: 'children',
@@ -189,7 +192,7 @@ export const componentDocs: ComponentDocMeta[] = [
 	},
 	{
 		slug: 'menu',
-		title: 'Menu',
+		title: 'Menu 导航菜单',
 		components: ['ZenlessMenu', 'ZenlessMenuItem', 'ZenlessSubMenu'],
 		summary: '支持嵌套、手风琴和动态项的导航菜单。',
 		bindable: 'bind:value / bind:open',
@@ -198,7 +201,7 @@ export const componentDocs: ComponentDocMeta[] = [
 	},
 	{
 		slug: 'message',
-		title: 'Message',
+		title: 'Message 消息提示',
 		components: ['ZenlessMessage', 'ZenlessMessageHost', 'useMessage'],
 		summary: 'Host 队列和 SSR 安全的命令式消息。',
 		callbacks: 'useMessage().success/warning/error',
@@ -206,7 +209,7 @@ export const componentDocs: ComponentDocMeta[] = [
 	},
 	{
 		slug: 'modal',
-		title: 'Modal',
+		title: 'Modal 对话框',
 		components: ['ZenlessModal'],
 		summary: 'Portal、焦点陷阱、滚动锁与焦点回归。',
 		bindable: 'bind:open',
@@ -216,7 +219,7 @@ export const componentDocs: ComponentDocMeta[] = [
 	},
 	{
 		slug: 'pagination',
-		title: 'Pagination',
+		title: 'Pagination 分页',
 		components: ['ZenlessPagination'],
 		summary: '分页值、总数和禁用边界。',
 		bindable: 'bind:value',
@@ -225,21 +228,21 @@ export const componentDocs: ComponentDocMeta[] = [
 	},
 	{
 		slug: 'pattern',
-		title: 'Pattern',
+		title: 'Pattern 纹理',
 		components: ['ZenlessPattern'],
 		summary: '可复用背景纹理容器。',
 		snippets: 'children'
 	},
 	{
 		slug: 'progress',
-		title: 'Progress',
+		title: 'Progress 进度条',
 		components: ['ZenlessProgress'],
 		summary: '线性与环形进度。',
 		snippets: 'children'
 	},
 	{
 		slug: 'radio',
-		title: 'Radio',
+		title: 'Radio 单选框',
 		components: ['ZenlessRadio', 'ZenlessRadioGroup', 'ZenlessRadioButton'],
 		summary: '单选框及按钮样式分组。',
 		bindable: 'bind:checked / bind:value',
@@ -248,7 +251,7 @@ export const componentDocs: ComponentDocMeta[] = [
 	},
 	{
 		slug: 'scrollbar',
-		title: 'Scrollbar',
+		title: 'Scrollbar 滚动条',
 		components: ['ZenlessScrollbar'],
 		summary: 'ResizeObserver、自定义轨道与明确实例方法。',
 		callbacks: 'onscroll',
@@ -257,7 +260,7 @@ export const componentDocs: ComponentDocMeta[] = [
 	},
 	{
 		slug: 'select',
-		title: 'Select',
+		title: 'Select 选择器',
 		components: ['ZenlessSelect', 'ZenlessOption'],
 		summary: '值到标签映射、动态选项与空状态。',
 		bindable: 'bind:value',
@@ -267,7 +270,7 @@ export const componentDocs: ComponentDocMeta[] = [
 	},
 	{
 		slug: 'slider',
-		title: 'Slider',
+		title: 'Slider 滑块',
 		components: ['ZenlessSlider'],
 		summary: 'Pointer Events 与键盘可调滑块。',
 		bindable: 'bind:value',
@@ -276,7 +279,7 @@ export const componentDocs: ComponentDocMeta[] = [
 	},
 	{
 		slug: 'switch',
-		title: 'Switch',
+		title: 'Switch 开关',
 		components: ['ZenlessSwitch'],
 		summary: '布尔切换控件。',
 		bindable: 'bind:checked',
@@ -285,14 +288,14 @@ export const componentDocs: ComponentDocMeta[] = [
 	},
 	{
 		slug: 'table',
-		title: 'Table',
+		title: 'Table 表格',
 		components: ['ZenlessTable', 'ZenlessTableColumn'],
 		summary: '泛型 columns API 或 Context 声明式列。',
 		snippets: 'cell / header / empty'
 	},
 	{
 		slug: 'tabs',
-		title: 'Tabs',
+		title: 'Tabs 标签页',
 		components: ['ZenlessTabs', 'ZenlessTabPanel'],
 		summary: '动态注册、懒加载和 roving tabindex。',
 		bindable: 'bind:value',
@@ -302,7 +305,7 @@ export const componentDocs: ComponentDocMeta[] = [
 	},
 	{
 		slug: 'tag',
-		title: 'Tag',
+		title: 'Tag 标签',
 		components: ['ZenlessTag'],
 		summary: '主题标签和关闭按钮。',
 		callbacks: 'onclose',
@@ -311,7 +314,7 @@ export const componentDocs: ComponentDocMeta[] = [
 	},
 	{
 		slug: 'textarea',
-		title: 'Textarea',
+		title: 'Textarea 文本域',
 		components: ['ZenlessTextarea'],
 		summary: '自动高度与原生 textarea 属性。',
 		bindable: 'bind:value',
@@ -319,7 +322,7 @@ export const componentDocs: ComponentDocMeta[] = [
 	},
 	{
 		slug: 'tooltip',
-		title: 'Tooltip',
+		title: 'Tooltip 文字提示',
 		components: ['ZenlessTooltip'],
 		summary: '十二方向提示内容。',
 		snippets: 'children / contentSnippet'
