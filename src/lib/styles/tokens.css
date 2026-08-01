@@ -1,0 +1,34 @@
+:root {
+	--zenless-black: #000;
+	--zenless-white: #fff;
+	--zenless-primary: #008bff;
+	--zenless-success: #00cc0d;
+	--zenless-danger: #c01c00;
+	--zenless-warning: #ffc300;
+	--zenless-info: #ccc;
+	--zenless-ether: #fe427e;
+	--zenless-fire: #ff5522;
+	--zenless-electric: #2eb6ff;
+	--zenless-ice: #98eff0;
+	--zenless-physical: #f0d12a;
+	--zenless-gradient-green: #91bc00;
+	--zenless-gradient-yellow: #ffea00;
+	--zenless-border-radius-round: 9999px;
+	--zenless-motion-color-duration: 1s;
+	--zenless-motion-size-duration: 0.33s;
+	--zenless-motion-flash-duration: 0.07s;
+	--zenless-font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+	--zenless-background: #181818;
+	--zenless-foreground: #f5f5f5;
+	--zenless-muted-foreground: #808080;
+	--zenless-border: #333;
+	--zenless-panel: #1c1c1c;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	:root {
+		--zenless-motion-color-duration: 0.001ms;
+		--zenless-motion-size-duration: 0.001ms;
+		--zenless-motion-flash-duration: 0.001ms;
+	}
+}

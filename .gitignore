@@ -1,5 +1,8 @@
 .vscode
 build
 dist
-docs
 node_modules
+.svelte-kit
+playwright-report
+test-results
+.artifacts

@@ -1,45 +1,88 @@
 {
-  "name": "zenless-ui",
-  "version": "1.0.7",
-  "type": "module",
-  "files": [
-    "dist"
-  ],
-  "module": "./dist/index.js",
-  "exports": {
-    ".": {
-      "import": "./dist/index.js"
-    },
-    "./*": "./*"
-  },
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "build:site": "vite build --config vite.config.site.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:ChrisChan13/zenless-ui.git"
-  },
-  "homepage": "https://chrischan13.github.io/zenless-ui",
-  "keywords": [
-    "zenless",
-    "vue",
-    "components"
-  ],
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/ChrisChan13/zenless-ui/issues"
-  },
-  "style": "./dist/index.css",
-  "devDependencies": {
-    "@vitejs/plugin-vue": "^5.1.2",
-    "sass": "^1.77.8",
-    "vite": "^5.4.0",
-    "vue": "^3.4.35",
-    "vue-router": "^4.4.3"
-  },
-  "dependencies": {
-    "throttle-debounce": "^5.0.2"
-  }
+	"name": "zenless-ui-svelte",
+	"version": "0.1.0-next.0",
+	"description": "A Svelte 5 component library inspired by Zenless Zone Zero.",
+	"type": "module",
+	"packageManager": "pnpm@10.32.1",
+	"files": [
+		"dist",
+		"!dist/**/*.test.*",
+		"!dist/**/*.spec.*"
+	],
+	"sideEffects": [
+		"**/*.css"
+	],
+	"svelte": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"style": "./dist/styles.css",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"svelte": "./dist/index.js"
+		},
+		"./styles.css": "./dist/styles.css",
+		"./locale": {
+			"types": "./dist/locale/index.d.ts",
+			"default": "./dist/locale/index.js"
+		}
+	},
+	"scripts": {
+		"dev": "vite dev",
+		"preview": "vite preview",
+		"prepare": "svelte-kit sync || echo ''",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --fail-on-warnings",
+		"check:migration": "node scripts/audit-migration.mjs",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"lint": "prettier --check package.json README.md README.EN.md SVELTE_MIGRATION_PLAN.md .github src/app.d.ts src/app.html src/lib src/routes tests scripts vite.config.ts vitest.ssr.config.ts eslint.config.js prettier.config.js playwright.config.ts && eslint src/lib src/routes tests scripts vite.config.ts vitest.ssr.config.ts eslint.config.js prettier.config.js playwright.config.ts --max-warnings 0",
+		"format": "prettier --write package.json README.md README.EN.md SVELTE_MIGRATION_PLAN.md .github src/app.d.ts src/app.html src/lib src/routes tests scripts vite.config.ts vitest.ssr.config.ts eslint.config.js prettier.config.js playwright.config.ts",
+		"test:unit": "vitest run && vitest run --config vitest.ssr.config.ts",
+		"test:e2e": "playwright test",
+		"package": "svelte-kit sync && svelte-package",
+		"check:package": "corepack pnpm run package && publint",
+		"build:docs": "vite build",
+		"build": "corepack pnpm run package && corepack pnpm run build:docs",
+		"test:consumers": "corepack pnpm run package && node scripts/verify-consumers.mjs",
+		"verify": "corepack pnpm run lint && corepack pnpm run check && corepack pnpm run check:migration && corepack pnpm run test:unit && corepack pnpm run check:package && corepack pnpm run build && corepack pnpm run test:e2e && corepack pnpm run test:consumers"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+ssh://git@github.com/ChrisChan13/zenless-ui.git"
+	},
+	"keywords": [
+		"svelte",
+		"sveltekit",
+		"components",
+		"zenless"
+	],
+	"license": "MIT",
+	"peerDependencies": {
+		"svelte": "^5.0.0"
+	},
+	"devDependencies": {
+		"@eslint/js": "^10.0.1",
+		"@playwright/test": "^1.60.0",
+		"@sveltejs/adapter-auto": "^7.0.1",
+		"@sveltejs/kit": "^2.63.0",
+		"@sveltejs/package": "^2.5.8",
+		"@sveltejs/vite-plugin-svelte": "^7.1.2",
+		"@testing-library/jest-dom": "^6.9.1",
+		"@testing-library/svelte": "^5.2.8",
+		"@types/node": "^24.0.0",
+		"eslint": "^10.4.1",
+		"eslint-config-prettier": "^10.1.8",
+		"eslint-plugin-svelte": "^3.19.0",
+		"globals": "^17.6.0",
+		"jsdom": "^28.0.0",
+		"playwright": "^1.60.0",
+		"prettier": "^3.8.3",
+		"prettier-plugin-svelte": "^4.1.0",
+		"publint": "^0.3.21",
+		"sass": "^1.97.2",
+		"svelte": "^5.56.1",
+		"svelte-check": "^4.6.0",
+		"typescript": "^6.0.3",
+		"typescript-eslint": "^8.60.1",
+		"vite": "^8.0.16",
+		"vitest": "^4.1.8"
+	}
 }
