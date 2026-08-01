@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
-import { componentDocs, componentProps } from '../../src/routes/components/component-meta.js';
+import { componentApiDocs } from '../../src/routes/components/component-api.js';
+import { componentDocs } from '../../src/routes/components/component-meta.js';
 
 test('renders the Vue-inspired Svelte documentation shell', async ({ page }) => {
 	await page.goto('/');
@@ -59,12 +60,66 @@ test('publishes all component routes with concrete API metadata', async ({ page 
 		await page.goto(`/components/${meta.slug}`);
 		await expect(page.getByRole('heading', { level: 1 })).toHaveText(meta.title);
 		for (const component of meta.components) {
-			if (componentProps[component]) {
-				documented.add(component);
-				await expect(page.getByRole('cell', { name: component, exact: true })).toBeVisible();
+			const api = componentApiDocs[component];
+			expect(api, `Missing API metadata for ${component}`).toBeTruthy();
+			expect(
+				(api.attributes?.length ?? 0) +
+					(api.events?.length ?? 0) +
+					(api.methods?.length ?? 0) +
+					(api.snippets?.length ?? 0),
+				`${component} API metadata is empty`
+			).toBeGreaterThan(0);
+			documented.add(component);
+
+			if (api.attributes?.length) {
+				const section = page.locator(
+					`.component-api-section[data-component="${component}"][data-kind="attributes"]`
+				);
+				await expect(section).toBeVisible();
+				await expect(section.getByRole('columnheader')).toHaveText([
+					'参数',
+					'说明',
+					'类型',
+					'可选值',
+					'默认值'
+				]);
+				for (const attribute of api.attributes) {
+					await expect(
+						section.getByRole('cell', { name: attribute.name, exact: true })
+					).toBeVisible();
+					expect(attribute.description).not.toBe('');
+					expect(attribute.type).not.toBe('');
+					expect(attribute.values).not.toBe('');
+					expect(attribute.default).not.toBe('');
+				}
 			}
 		}
 	}
 
-	expect(documented.size).toBe(41);
+	expect([...documented].sort()).toEqual(Object.keys(componentApiDocs).sort());
+});
+
+test('pairs every component preview with collapsible Svelte source', async ({ page }) => {
+	for (const meta of componentDocs) {
+		await page.goto(`/components/${meta.slug}`);
+		const previews = page.locator('.component-preview');
+		const toggles = page.getByRole('button', { name: '显示代码' });
+		const count = await previews.count();
+		expect(count, `${meta.slug} has no component previews`).toBeGreaterThan(0);
+		await expect(toggles).toHaveCount(count);
+		for (let index = 0; index < count; index += 1) {
+			const preview = previews.nth(index);
+			const toggle = preview.getByRole('button', { name: '显示代码' });
+			await toggle.click();
+			const closeToggle = preview.getByRole('button', { name: '隐藏代码' });
+			await expect(closeToggle).toHaveAttribute('aria-expanded', 'true');
+			await expect(preview.locator('.source-code-content')).toHaveClass(/is-visible/);
+			await expect(preview.locator('pre code')).not.toBeEmpty();
+			await closeToggle.click();
+			await expect(preview.getByRole('button', { name: '显示代码' })).toHaveAttribute(
+				'aria-expanded',
+				'false'
+			);
+		}
+	}
 });

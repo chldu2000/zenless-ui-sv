@@ -1,10 +1,7 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import {
-	componentDocs,
-	componentProps,
-	componentSlugs
-} from '../src/routes/components/component-meta.ts';
+import { componentDocs, componentSlugs } from '../src/routes/components/component-meta.ts';
+import { componentApiDocs } from '../src/routes/components/component-api.ts';
 
 const projectRoot = resolve(import.meta.dirname, '..');
 const libraryEntry = readFileSync(resolve(projectRoot, 'src/lib/index.ts'), 'utf8');
@@ -78,7 +75,14 @@ for (const component of vuePublicComponents) {
 		`Missing public Svelte export for ${component}.`
 	);
 	assert(documented.has(component), `Missing documentation route for ${component}.`);
-	assert(Boolean(componentProps[component]), `Missing concrete Props metadata for ${component}.`);
+	assert(Boolean(componentApiDocs[component]), `Missing concrete API metadata for ${component}.`);
+	assert(
+		(componentApiDocs[component].attributes?.length ?? 0) > 0 ||
+			(componentApiDocs[component].events?.length ?? 0) > 0 ||
+			(componentApiDocs[component].methods?.length ?? 0) > 0 ||
+			(componentApiDocs[component].snippets?.length ?? 0) > 0,
+		`Empty API metadata for ${component}.`
+	);
 }
 
 assert(

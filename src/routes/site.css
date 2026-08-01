@@ -229,6 +229,20 @@ code {
 	white-space: pre;
 }
 
+.component-table-wrap {
+	width: 100%;
+	overflow-x: auto;
+	border-radius: 16px;
+}
+
+.component-api-table {
+	min-width: 760px;
+}
+
+.component-api-table .z-table__cell {
+	white-space: break-spaces;
+}
+
 .float-btn {
 	position: fixed;
 	right: 120px;

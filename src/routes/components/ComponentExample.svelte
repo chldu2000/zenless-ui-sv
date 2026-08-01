@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { base, resolve } from '$app/paths';
 	import type { Attachment } from 'svelte/attachments';
+	import componentExampleSource from './ComponentExample.svelte?raw';
 	import {
 		ZenlessBacktop,
 		ZenlessBadge,
@@ -45,8 +46,10 @@
 	} from '$lib/index.js';
 	import DemoMessageButton from './DemoMessageButton.svelte';
 	import DemoSection from './DemoSection.svelte';
+	import { provideDemoSources } from './demo-source.js';
 
 	let { slug }: { slug: string } = $props();
+	provideDemoSources(componentExampleSource, () => slug);
 
 	const colors = [
 		{ value: 'default', label: '默认' },

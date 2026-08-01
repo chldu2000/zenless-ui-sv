@@ -8,7 +8,13 @@ async function prepareVisualPage(page: import('@playwright/test').Page, path: st
 		video.currentTime = 0;
 	});
 	await page.addStyleTag({
-		content: '.z-tabs__item.is-active::before { animation: none !important; }'
+		content: `
+			.z-tabs__item.is-active::before,
+			.z-message,
+			.z-message__content {
+				animation: none !important;
+			}
+		`
 	});
 	await page.waitForTimeout(1000);
 }

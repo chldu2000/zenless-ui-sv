@@ -1,23 +1,31 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import SourceCode from './docs/SourceCode.svelte';
+	import { consumeDemoSource } from './demo-source.js';
 
 	interface Props {
 		title?: string;
 		children?: Snippet;
+		code?: string;
 		dark?: boolean;
 		class?: string;
 	}
 
-	let { title, children, dark = false, class: className }: Props = $props();
+	let { title, children, code, dark = false, class: className }: Props = $props();
+	const extractedCode = consumeDemoSource();
+	const source = $derived(code ?? extractedCode);
 </script>
 
 <div class="demo-section">
 	{#if title}<h2 class="component-header">{title}</h2>{/if}
 	<section
-		class={['component-preview', 'demo', dark && 'is-dark', className].filter(Boolean).join(' ')}
+		class={['component-preview', 'demo', dark && 'is-dark'].filter(Boolean).join(' ')}
 		aria-label={title ?? '组件示例'}
 	>
-		{@render children?.()}
+		<div class={['component-preview-line', 'demo-content', className].filter(Boolean).join(' ')}>
+			{@render children?.()}
+		</div>
+		{#if source}<SourceCode code={source} collapse />{/if}
 	</section>
 </div>
 
@@ -27,26 +35,35 @@
 	}
 
 	.demo {
-		display: flex;
 		box-sizing: border-box;
 		width: 100%;
 		min-height: 3.5rem;
-		align-items: center;
-		flex-wrap: wrap;
-		gap: 0.75rem;
-		padding: 30px;
+		padding: 30px 0 0;
+		overflow: hidden;
 		border-radius: 16px;
 		background: #222;
 		box-shadow: inset 0 1px 3px #333;
+	}
+
+	.demo-content {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+		margin: 0 30px;
 	}
 
 	.demo.is-dark {
 		background: #000;
 	}
 
+	.demo.is-dark :global(.source-code-expand.is-sticky) {
+		background: #000;
+	}
+
 	@media (max-width: 40rem) {
-		.demo {
-			padding: 24px;
+		.demo-content {
+			margin: 0 20px;
 		}
 	}
 </style>
