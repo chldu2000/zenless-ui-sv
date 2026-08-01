@@ -41,10 +41,19 @@ export function extractDemoSources(source: string, slug: string) {
 }
 
 export function provideDemoSources(source: string, getSlug: () => string) {
-	let sources: string[] | undefined;
+	let activeSlug: string | undefined;
+	let sources: string[] = [];
 	let index = 0;
 	setContext<DemoSourceContext>(demoSourceContextKey, {
-		next: () => (sources ??= extractDemoSources(source, getSlug()))[index++] ?? ''
+		next: () => {
+			const slug = getSlug();
+			if (slug !== activeSlug) {
+				activeSlug = slug;
+				sources = extractDemoSources(source, slug);
+				index = 0;
+			}
+			return sources[index++] ?? '';
+		}
 	});
 }
 

@@ -123,3 +123,24 @@ test('pairs every component preview with collapsible Svelte source', async ({ pa
 		}
 	}
 });
+
+test('keeps demo source controls after client-side component navigation', async ({ page }) => {
+	await page.goto('/components/button');
+
+	for (const destination of [
+		{ menuItem: /^Card/, slug: 'card', title: 'Card 卡片' },
+		{ menuItem: /^Input/, slug: 'input', title: 'Input 输入框' },
+		{ menuItem: /^Button/, slug: 'button', title: 'Button 按钮' }
+	]) {
+		await page.getByRole('menuitem', { name: destination.menuItem }).click();
+		await expect(page).toHaveURL(new RegExp(`/components/${destination.slug}/?$`));
+		await expect(page.getByRole('heading', { level: 1 })).toHaveText(destination.title);
+
+		const previews = page.locator('.component-preview');
+		const previewCount = await previews.count();
+		expect(previewCount).toBeGreaterThan(0);
+		await expect(page.getByRole('button', { name: '显示代码' })).toHaveCount(previewCount);
+		await expect(previews.first()).toHaveCSS('overflow', 'hidden');
+		await expect(previews.first().getByRole('button', { name: '显示代码' })).toBeVisible();
+	}
+});
