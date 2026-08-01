@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import type { Attachment } from 'svelte/attachments';
 	import {
 		ZenlessBacktop,
@@ -118,7 +119,7 @@
 	{:else if slug === 'input'}
 		<ZenlessInput bind:value={text} clearable />
 	{:else if slug === 'link'}
-		<ZenlessLink href="/components" type="primary" underline>组件列表</ZenlessLink>
+		<ZenlessLink href={resolve('/components')} type="primary" underline>组件列表</ZenlessLink>
 	{:else if slug === 'menu'}
 		<ZenlessMenu bind:value={menu} accordion
 			><ZenlessMenuItem name="home">首页</ZenlessMenuItem><ZenlessSubMenu title="代理人"

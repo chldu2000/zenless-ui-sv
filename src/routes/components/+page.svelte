@@ -55,7 +55,7 @@
 		<h2 id="button-heading">Button / Link / Icon</h2>
 		<ZenlessButton type="primary" icon="check">确认</ZenlessButton>
 		<ZenlessButton type="fire" hollow>Fire</ZenlessButton>
-		<ZenlessLink type="electric" underline href="/components">组件文档</ZenlessLink>
+		<ZenlessLink type="electric" underline href={resolve('/components')}>组件文档</ZenlessLink>
 		<ZenlessIcon name="home" color="warning" size={22} aria-label="首页" />
 	</section>
 	<section aria-labelledby="advanced-heading">
