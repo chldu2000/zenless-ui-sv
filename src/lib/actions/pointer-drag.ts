@@ -16,6 +16,7 @@ export interface PointerDragOptions {
 }
 
 export const pointerDrag: Action<HTMLElement, PointerDragOptions> = (node, options) => {
+	let currentOptions = options;
 	let activePointerId: number | undefined;
 	let previousX = 0;
 	let previousY = 0;
@@ -43,23 +44,23 @@ export const pointerDrag: Action<HTMLElement, PointerDragOptions> = (node, optio
 
 	const onPointerMove = (event: PointerEvent) => {
 		if (event.pointerId !== activePointerId) return;
-		options.onMove(toDragEvent(event));
+		currentOptions.onMove(toDragEvent(event));
 	};
 
 	const onPointerEnd = (event: PointerEvent) => {
 		if (event.pointerId !== activePointerId) return;
-		options.onEnd?.(toDragEvent(event));
+		currentOptions.onEnd?.(toDragEvent(event));
 		activePointerId = undefined;
 		removeWindowListeners();
 	};
 
 	const onPointerDown = (event: PointerEvent) => {
-		if (options.disabled || event.button !== 0 || activePointerId !== undefined) return;
+		if (currentOptions.disabled || event.button !== 0 || activePointerId !== undefined) return;
 		activePointerId = event.pointerId;
 		previousX = event.clientX;
 		previousY = event.clientY;
 		node.setPointerCapture?.(event.pointerId);
-		options.onStart?.(toDragEvent(event));
+		currentOptions.onStart?.(toDragEvent(event));
 		window.addEventListener('pointermove', onPointerMove);
 		window.addEventListener('pointerup', onPointerEnd);
 		window.addEventListener('pointercancel', onPointerEnd);
@@ -68,6 +69,9 @@ export const pointerDrag: Action<HTMLElement, PointerDragOptions> = (node, optio
 	node.addEventListener('pointerdown', onPointerDown);
 
 	return {
+		update(nextOptions) {
+			currentOptions = nextOptions;
+		},
 		destroy() {
 			node.removeEventListener('pointerdown', onPointerDown);
 			removeWindowListeners();

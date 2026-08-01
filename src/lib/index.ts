@@ -26,6 +26,24 @@ export { default as ZenlessMenuItem } from './ZenlessMenuItem.svelte';
 export { default as ZenlessSubMenu } from './ZenlessSubMenu.svelte';
 export { default as ZenlessDropdown } from './ZenlessDropdown.svelte';
 export { default as ZenlessDropdownItem } from './ZenlessDropdownItem.svelte';
+export { default as ZenlessTooltip } from './ZenlessTooltip.svelte';
+export { default as ZenlessModal } from './ZenlessModal.svelte';
+export { default as ZenlessDrawer } from './ZenlessDrawer.svelte';
+export { default as ZenlessMessage } from './ZenlessMessage.svelte';
+export { default as ZenlessMessageHost } from './ZenlessMessageHost.svelte';
+export {
+	useMessage,
+	type ZenlessMessageApi,
+	type ZenlessMessageOptions,
+	type ZenlessMessagePayload
+} from './message.js';
+export { default as ZenlessSlider } from './ZenlessSlider.svelte';
+export { default as ZenlessScrollbar } from './ZenlessScrollbar.svelte';
+export type { ZenlessScrollbarInstance, ZenlessScrollbarProps } from './ZenlessScrollbar.svelte';
+export { default as ZenlessBacktop } from './ZenlessBacktop.svelte';
+export { default as ZenlessTable } from './ZenlessTable.svelte';
+export { default as ZenlessTableColumn } from './ZenlessTableColumn.svelte';
+export type { ZenlessTableColumnDefinition } from './table-types.js';
 export { default as ZenlessBadge } from './ZenlessBadge.svelte';
 export { default as ZenlessCard } from './ZenlessCard.svelte';
 export { default as ZenlessProgress } from './ZenlessProgress.svelte';

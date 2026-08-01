@@ -389,6 +389,8 @@ format/lint
 
 ## 12. 阶段 6：Overlay、拖拽、滚动和 Table
 
+> 状态：已完成（2026-08-01）
+
 ### 6A. Overlay 与命令式组件
 
 组件：

@@ -6,6 +6,8 @@ The migrated presentation components are `ZenlessIcon`, `ZenlessButton`, `Zenles
 
 Migrated form and navigation components include Input, Textarea, Switch, Radio, Checkbox, Form, Pagination, Collapse, Tabs, Menu, Dropdown, Select, and their companion child components.
 
+Migrated advanced components include Tooltip, Modal, Drawer, Message, Scrollbar, Backtop, Slider, Table, and TableColumn. See `docs/migration-guide.md` for Vue-to-Svelte API differences.
+
 ## Using the infrastructure
 
 Import the stylesheet at your app entry point and use the Provider for local theme and locale configuration:

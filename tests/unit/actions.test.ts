@@ -100,15 +100,19 @@ describe('DOM actions', () => {
 		expect(document.activeElement).toBe(trigger);
 	});
 
-	it('moves portalled content and restores it on teardown', () => {
+	it('moves portalled content, supports target updates and removes it on teardown', () => {
 		const origin = document.body.appendChild(document.createElement('div'));
 		const target = document.body.appendChild(document.createElement('div'));
+		const nextTarget = document.body.appendChild(document.createElement('div'));
 		const node = origin.appendChild(document.createElement('div'));
 		const action = portal(node, target);
 
 		expect(target).toContainElement(node);
+		action?.update?.(nextTarget);
+		expect(nextTarget).toContainElement(node);
 		if (action) action.destroy?.();
-		expect(origin).toContainElement(node);
+		expect(document.body).not.toContainElement(node);
+		expect(origin.childNodes).toHaveLength(0);
 	});
 
 	it('reference-counts body scroll locks', () => {

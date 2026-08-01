@@ -6,6 +6,8 @@ Zenless UI 的 Svelte 5 组件库迁移版本。目前已具备库打包、文�
 
 已迁移的表单与导航组件包括 Input、Textarea、Switch、Radio、Checkbox、Form、Pagination、Collapse、Tabs、Menu、Dropdown 和 Select 及其配套子组件。
 
+已迁移的高级组件包括 Tooltip、Modal、Drawer、Message、Scrollbar、Backtop、Slider、Table 与 TableColumn；Vue 到 Svelte 的 API 差异见 `docs/migration-guide.md`。
+
 ## 使用基础设施
 
 在应用入口引入样式，并使用 Provider 提供局部主题和语言配置：

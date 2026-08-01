@@ -19,3 +19,13 @@ test('renders low-risk presentation component examples', async ({ page }) => {
 	await expect(page.getByRole('progressbar')).toHaveCount(2);
 	await expect(page.getByRole('button', { name: 'Close' })).toBeVisible();
 });
+
+test('restores focus when the advanced modal closes with Escape', async ({ page }) => {
+	await page.goto('/components');
+	const trigger = page.getByRole('button', { name: '打开 Modal' });
+	await trigger.click();
+	await expect(page.getByRole('dialog', { name: '代理人详情' })).toBeVisible();
+	await page.keyboard.press('Escape');
+	await expect(page.getByRole('dialog')).toHaveCount(0);
+	await expect(trigger).toBeFocused();
+});

@@ -12,19 +12,29 @@
 		ZenlessLink,
 		ZenlessMenu,
 		ZenlessMenuItem,
+		ZenlessModal,
 		ZenlessOption,
 		ZenlessPattern,
 		ZenlessProgress,
 		ZenlessSelect,
+		ZenlessSlider,
 		ZenlessSubMenu,
 		ZenlessTabPanel,
 		ZenlessTabs,
+		ZenlessTable,
+		ZenlessTableColumn,
 		ZenlessTag
 	} from '$lib/index.js';
 	import '$lib/styles.css';
 	let tab = $state<string | number>('overview');
 	let menu = $state<string | number>('home');
 	let agent = $state<string | number | boolean>();
+	let modalOpen = $state(false);
+	let sliderValue = $state(30);
+	const agents = [
+		{ name: '安比', role: '击破' },
+		{ name: '妮可', role: '支援' }
+	];
 </script>
 
 <svelte:head>
@@ -41,6 +51,19 @@
 		<ZenlessButton type="fire" hollow>Fire</ZenlessButton>
 		<ZenlessLink type="electric" underline href="/components">组件文档</ZenlessLink>
 		<ZenlessIcon name="home" color="warning" size={22} aria-label="首页" />
+	</section>
+	<section aria-labelledby="advanced-heading">
+		<h2 id="advanced-heading">Modal / Slider / Table</h2>
+		<ZenlessButton onclick={() => (modalOpen = true)}>打开 Modal</ZenlessButton>
+		<ZenlessModal bind:open={modalOpen} title="代理人详情"
+			><button type="button">对话框内容</button></ZenlessModal
+		>
+		<ZenlessSlider bind:value={sliderValue} step={10} tooltip />
+		<output>Slider: {sliderValue}</output>
+		<ZenlessTable data={agents} rowKey="name">
+			<ZenlessTableColumn prop="name" label="代理人" />
+			<ZenlessTableColumn prop="role" label="定位" />
+		</ZenlessTable>
 	</section>
 	<section aria-labelledby="feedback-heading">
 		<h2 id="feedback-heading">Tag / Badge / Progress</h2>

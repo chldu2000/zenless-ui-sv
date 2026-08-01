@@ -10,17 +10,17 @@ function resolveTarget(target: PortalTarget): HTMLElement | null {
 }
 
 export const portal: Action<HTMLElement, PortalTarget> = (node, target) => {
-	const originParent = node.parentNode;
 	const placeholder = document.createComment('zenless-portal');
-	originParent?.insertBefore(placeholder, node);
+	node.parentNode?.insertBefore(placeholder, node);
 	resolveTarget(target)?.appendChild(node);
 
 	return {
+		update(nextTarget) {
+			resolveTarget(nextTarget)?.appendChild(node);
+		},
 		destroy() {
-			if (placeholder.parentNode) {
-				placeholder.parentNode.insertBefore(node, placeholder);
-				placeholder.remove();
-			}
+			node.remove();
+			placeholder.remove();
 		}
 	};
 };
