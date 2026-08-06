@@ -160,3 +160,30 @@ test('allows dropdown menus to escape the demo preview card', async ({ page }) =
 	expect(menuBox).not.toBeNull();
 	expect(menuBox!.y + menuBox!.height).toBeGreaterThan(previewBox!.y + previewBox!.height);
 });
+
+test('matches source dropdown item sizing and disabled reset', async ({ page }) => {
+	await page.goto('/components/dropdown');
+	const dropdowns = page.locator('.component-preview').nth(3).locator('.z-dropdown');
+	const expected = [
+		{ height: '52px', fontSize: '18px' },
+		{ height: '46px', fontSize: '16px' },
+		{ height: '40px', fontSize: '16px' },
+		{ height: '34px', fontSize: '12px' },
+		{ height: '30px', fontSize: '12px' }
+	];
+
+	for (let index = 0; index < expected.length; index += 1) {
+		const dropdown = dropdowns.nth(index);
+		await dropdown.locator('.z-dropdown__trigger').click();
+		const item = dropdown.locator('.z-dropdown-item').first();
+		await expect(item).toHaveCSS('height', expected[index].height);
+		await expect(item).toHaveCSS('font-size', expected[index].fontSize);
+		await expect(item).toHaveCSS('appearance', 'none');
+		await dropdown.locator('.z-dropdown__trigger').click();
+	}
+
+	const disabled = dropdowns.first().locator('.z-dropdown-item[disabled]');
+	await dropdowns.first().locator('.z-dropdown__trigger').click();
+	await expect(disabled).toHaveCSS('border-width', '0px');
+	await expect(disabled).toHaveCSS('appearance', 'none');
+});

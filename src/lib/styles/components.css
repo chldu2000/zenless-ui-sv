@@ -2976,13 +2976,15 @@
 	cursor: not-allowed;
 	color: #5e5e5e;
 	background: #222;
+	border: 0;
+	appearance: none;
 }
 
 .z-dropdown-item:not(:disabled) {
 	border: 0;
 	color: inherit;
 	background: transparent;
-	font: inherit;
+	appearance: none;
 }
 
 .z-tabs__item:disabled,
