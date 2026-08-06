@@ -93,12 +93,14 @@
 		'plus',
 		'minus'
 	];
-	const formPositions = ['left', 'right', 'top'] as const;
+	let formPosition = $state<string | number | boolean>('right');
+	const labelPosition = $derived(formPosition as 'left' | 'right' | 'top');
 
 	let text = $state('新艾利都');
 	let password = $state('proxy-password');
 	let checked = $state(true);
 	let checks = $state<(string | number | boolean)[]>(['anby']);
+	let checksWithLimit = $state<(string | number | boolean)[]>(['anby']);
 	let choice = $state<string | number | boolean>('anby');
 	let page = $state(1);
 	let collapse = $state<string | number | (string | number)[]>(['one']);
@@ -214,14 +216,14 @@
 			<ZenlessCheckbox disabled>未选禁用</ZenlessCheckbox>
 		</DemoSection>
 		<DemoSection title="多选框组">
-			<ZenlessCheckboxGroup bind:value={checks} min={1} max={2}>
+			<ZenlessCheckboxGroup bind:value={checks}>
 				<ZenlessCheckbox value="anby">安比</ZenlessCheckbox>
 				<ZenlessCheckbox value="nicole">妮可</ZenlessCheckbox>
 				<ZenlessCheckbox value="billy">比利</ZenlessCheckbox>
 			</ZenlessCheckboxGroup>
 		</DemoSection>
 		<DemoSection title="可选项目数量限制">
-			<ZenlessCheckboxGroup bind:value={checks} min={1} max={2}>
+			<ZenlessCheckboxGroup bind:value={checksWithLimit} min={1} max={2}>
 				<ZenlessCheckbox value="anby">安比</ZenlessCheckbox>
 				<ZenlessCheckbox value="nicole">妮可</ZenlessCheckbox>
 				<ZenlessCheckbox value="billy">比利</ZenlessCheckbox>
@@ -364,29 +366,64 @@
 		</DemoSection>
 	{:else if slug === 'form'}
 		<DemoSection title="基础用法" class="demo--stack">
-			<ZenlessForm labelWidth={90}>
-				<ZenlessFormItem label="代理人" required><ZenlessInput bind:value={text} /></ZenlessFormItem
+			<ZenlessForm labelWidth={100} style="width: min(500px, 100%)">
+				<ZenlessFormItem label="Input"><ZenlessInput placeholder="请输入" /></ZenlessFormItem>
+				<ZenlessFormItem label="Select" style="width: min(350px, 100%)"
+					><ZenlessSelect placeholder="请选择">
+						<ZenlessOption value={30} label="等级 Lv.30" />
+						<ZenlessOption value={40} label="等级 Lv.40" />
+						<ZenlessOption value={50} label="等级 Lv.50" />
+						<ZenlessOption value={60} label="等级 Lv.60" disabled />
+					</ZenlessSelect></ZenlessFormItem
 				>
-				<ZenlessFormItem label="阵营"
-					><ZenlessSelect bind:value={selected}
-						><ZenlessOption value={40} label="狡兔屋" /></ZenlessSelect
-					></ZenlessFormItem
+				<ZenlessFormItem label="Switch"><ZenlessSwitch /></ZenlessFormItem>
+				<ZenlessFormItem label="Radio">
+					<ZenlessRadioGroup>
+						<ZenlessRadio value={1}>备选项</ZenlessRadio>
+						<ZenlessRadio value={2}>备选项</ZenlessRadio>
+					</ZenlessRadioGroup>
+				</ZenlessFormItem>
+				<ZenlessFormItem label="Checkbox">
+					<ZenlessCheckboxGroup>
+						<ZenlessCheckbox value={1}>备选项</ZenlessCheckbox>
+						<ZenlessCheckbox value={2}>备选项</ZenlessCheckbox>
+						<ZenlessCheckbox value={3}>备选项</ZenlessCheckbox>
+					</ZenlessCheckboxGroup>
+				</ZenlessFormItem>
+				<ZenlessFormItem label="Slider"><ZenlessSlider /></ZenlessFormItem>
+				<ZenlessFormItem label="Textarea"
+					><ZenlessTextarea rows={4} placeholder="请输入" /></ZenlessFormItem
 				>
+				<ZenlessFormItem>
+					<ZenlessButton icon={{ success: '#00cc0d' }}>Submit</ZenlessButton>
+					<ZenlessButton icon={{ loading: '#ff5522' }}>Reset</ZenlessButton>
+				</ZenlessFormItem>
 			</ZenlessForm>
 		</DemoSection>
 		<DemoSection title="行内表单" class="demo--stack">
-			<ZenlessForm inline labelPosition="left">
-				<ZenlessFormItem label="编号"><ZenlessInput value="P-011" /></ZenlessFormItem>
-				<ZenlessFormItem><ZenlessButton type="primary">查询</ZenlessButton></ZenlessFormItem>
+			<ZenlessForm inline style="width: fit-content">
+				<ZenlessFormItem label="Input1"
+					><ZenlessInput placeholder="请输入" class="demo-inline-input" style="width: 200px" /></ZenlessFormItem
+				>
+				<ZenlessFormItem label="Input2"
+					><ZenlessInput placeholder="请输入" class="demo-inline-input" style="width: 200px" /></ZenlessFormItem
+				>
+				<ZenlessFormItem
+					><ZenlessButton icon={{ success: '#00cc0d' }}>Submit</ZenlessButton></ZenlessFormItem
+				>
 			</ZenlessForm>
 		</DemoSection>
-		<DemoSection title="对齐方式" class="demo--stack">
-			{#each formPositions as position (position)}
-				<ZenlessForm labelPosition={position} labelWidth={90}>
-					<ZenlessFormItem label={`${position} 对齐`}><ZenlessInput value="示例" /></ZenlessFormItem
-					>
-				</ZenlessForm>
-			{/each}
+		<DemoSection title="对齐方式" class="demo--stack" dark>
+			<ZenlessRadioGroup bind:value={formPosition}>
+				<ZenlessRadioButton value="left">左对齐</ZenlessRadioButton>
+				<ZenlessRadioButton value="right">右对齐</ZenlessRadioButton>
+				<ZenlessRadioButton value="top">顶部对齐</ZenlessRadioButton>
+			</ZenlessRadioGroup>
+			<ZenlessForm labelWidth={100} {labelPosition} style="width: min(400px, 100%)">
+				<ZenlessFormItem label="Input1"><ZenlessInput placeholder="请输入" /></ZenlessFormItem>
+				<ZenlessFormItem label="Input2"><ZenlessInput placeholder="请输入" /></ZenlessFormItem>
+				<ZenlessFormItem label="Input3"><ZenlessInput placeholder="请输入" /></ZenlessFormItem>
+			</ZenlessForm>
 		</DemoSection>
 	{:else if slug === 'icon'}
 		<DemoSection title="基础用法">
@@ -769,6 +806,10 @@
 
 	:global(.demo--menu .z-menu) {
 		width: 220px;
+	}
+
+	:global(.demo-inline-input) {
+		width: 200px;
 	}
 
 	:global(.pattern-demo) {
