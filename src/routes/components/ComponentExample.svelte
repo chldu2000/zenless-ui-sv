@@ -253,7 +253,7 @@
 				<ZenlessCollapseItem name="disabled" title="禁用面板" disabled />
 			</ZenlessCollapse>
 		</DemoSection>
-		<DemoSection title="朴素面板">
+		<DemoSection title="朴素面板" dark>
 			<ZenlessCollapse bind:value={collapse} plain>
 				<ZenlessCollapseItem name="one" title="第一项">朴素面板内容。</ZenlessCollapseItem>
 				<ZenlessCollapseItem name="two" title="第二项">第二项内容。</ZenlessCollapseItem>
