@@ -39,7 +39,6 @@
 		width: 100%;
 		min-height: 3.5rem;
 		padding: 30px 0 0;
-		overflow: hidden;
 		border-radius: 16px;
 		background: #222;
 		box-shadow: inset 0 1px 3px #333;

@@ -140,7 +140,23 @@ test('keeps demo source controls after client-side component navigation', async 
 		const previewCount = await previews.count();
 		expect(previewCount).toBeGreaterThan(0);
 		await expect(page.getByRole('button', { name: '显示代码' })).toHaveCount(previewCount);
-		await expect(previews.first()).toHaveCSS('overflow', 'hidden');
+		await expect(previews.first()).toHaveCSS('overflow', 'visible');
 		await expect(previews.first().getByRole('button', { name: '显示代码' })).toBeVisible();
 	}
+});
+
+test('allows dropdown menus to escape the demo preview card', async ({ page }) => {
+	await page.goto('/components/dropdown');
+	const preview = page.locator('.component-preview').first();
+	const trigger = preview.locator('.z-dropdown__trigger');
+	await trigger.hover();
+
+	const menu = preview.getByRole('menu');
+	await expect(menu).toBeVisible();
+	await expect(menu.getByRole('menuitem')).toHaveCount(4);
+
+	const [previewBox, menuBox] = await Promise.all([preview.boundingBox(), menu.boundingBox()]);
+	expect(previewBox).not.toBeNull();
+	expect(menuBox).not.toBeNull();
+	expect(menuBox!.y + menuBox!.height).toBeGreaterThan(previewBox!.y + previewBox!.height);
 });

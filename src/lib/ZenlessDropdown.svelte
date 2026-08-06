@@ -34,10 +34,10 @@
 		class: className,
 		...rest
 	}: ZenlessDropdownProps = $props();
-	let triggerElement: HTMLButtonElement | undefined;
+	let triggerElement: HTMLElement | undefined;
 	let menuElement: HTMLDivElement | undefined;
 	const zenless = getZenlessContext();
-	const captureTrigger: Attachment<HTMLButtonElement> = (node) => {
+	const captureTrigger: Attachment<HTMLElement> = (node) => {
 		triggerElement = node;
 		return () => {
 			if (triggerElement === node) triggerElement = undefined;
@@ -112,15 +112,25 @@
 	onmouseleave={() => trigger === 'hover' && setOpen(false)}
 	{...rest}
 >
-	<button
+	<span
 		{@attach captureTrigger}
 		class="z-dropdown__trigger"
-		type="button"
+		role="button"
+		tabindex={disabled ? -1 : 0}
 		aria-haspopup="menu"
 		aria-expanded={open}
-		{disabled}
+		aria-disabled={disabled || undefined}
 		onclick={() => trigger === 'click' && setOpen(!open)}
 		onkeydown={(event) => {
+			if (
+				(event.key === 'Enter' || event.key === ' ') &&
+				event.target === event.currentTarget &&
+				trigger === 'click'
+			) {
+				event.preventDefault();
+				setOpen(!open);
+				return;
+			}
 			if (event.key === 'ArrowDown' && !open) {
 				event.preventDefault();
 				setOpen(true);
@@ -128,7 +138,7 @@
 		}}
 	>
 		{@render children?.()}
-	</button>
+	</span>
 	<div
 		{@attach captureMenu}
 		class="z-dropdown__content"

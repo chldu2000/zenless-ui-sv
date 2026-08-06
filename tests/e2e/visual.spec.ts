@@ -72,9 +72,13 @@ for (const slug of ['modal', 'drawer', 'dropdown', 'message']) {
 				: slug === 'drawer'
 					? '打开抽屉'
 					: slug === 'dropdown'
-						? '操作'
+						? '下拉菜单'
 						: '显示消息';
-		await page.getByRole('button', { name: label }).click();
+		const trigger =
+			slug === 'dropdown'
+				? page.locator('.component-preview').nth(1).locator('.z-dropdown__trigger')
+				: page.getByRole('button', { name: label });
+		await trigger.click();
 		await expect(page).toHaveScreenshot(`${slug}-open.png`, { animations: 'allow' });
 	});
 }

@@ -299,39 +299,68 @@
 	{:else if slug === 'dropdown'}
 		<DemoSection title="基础用法">
 			<ZenlessDropdown>
-				悬停菜单
+				<ZenlessButton hollow icon="arrow-bottom">下拉菜单</ZenlessButton>
 				{#snippet content()}
-					<ZenlessDropdownItem value="profile">代理人档案</ZenlessDropdownItem>
-					<ZenlessDropdownItem value="gear">装备</ZenlessDropdownItem>
-					<ZenlessDropdownItem value="disabled" disabled>禁用项</ZenlessDropdownItem>
+					<ZenlessDropdownItem value="30">等级 Lv.30</ZenlessDropdownItem>
+					<ZenlessDropdownItem value="40">等级 Lv.40</ZenlessDropdownItem>
+					<ZenlessDropdownItem value="50">等级 Lv.50</ZenlessDropdownItem>
+					<ZenlessDropdownItem value="60" disabled>等级 Lv.60</ZenlessDropdownItem>
 				{/snippet}
 			</ZenlessDropdown>
 		</DemoSection>
 		<DemoSection title="点击触发">
 			<ZenlessDropdown trigger="click">
-				操作
+				<ZenlessButton hollow icon="arrow-bottom">下拉菜单</ZenlessButton>
 				{#snippet content()}
-					<ZenlessDropdownItem value="edit">编辑</ZenlessDropdownItem>
-					<ZenlessDropdownItem value="remove">删除</ZenlessDropdownItem>
+					<ZenlessDropdownItem value="30">等级 Lv.30</ZenlessDropdownItem>
+					<ZenlessDropdownItem value="40">等级 Lv.40</ZenlessDropdownItem>
+					<ZenlessDropdownItem value="50">等级 Lv.50</ZenlessDropdownItem>
+					<ZenlessDropdownItem value="60" disabled>等级 Lv.60</ZenlessDropdownItem>
 				{/snippet}
 			</ZenlessDropdown>
 		</DemoSection>
 		<DemoSection title="菜单隐藏方式">
 			<ZenlessDropdown trigger="click" hideOnCommand={false}>
-				点击项目后保持显示
+				<ZenlessButton hollow icon="arrow-bottom">下拉菜单</ZenlessButton>
 				{#snippet content()}
-					<ZenlessDropdownItem value="keep">保持菜单</ZenlessDropdownItem>
+					<ZenlessDropdownItem value="30">等级 Lv.30</ZenlessDropdownItem>
+					<ZenlessDropdownItem value="40">等级 Lv.40</ZenlessDropdownItem>
+					<ZenlessDropdownItem value="50">等级 Lv.50</ZenlessDropdownItem>
+					<ZenlessDropdownItem value="60" disabled>等级 Lv.60</ZenlessDropdownItem>
 				{/snippet}
 			</ZenlessDropdown>
 		</DemoSection>
 		<DemoSection title="不同尺寸">
-			{#each sizes.filter((item) => item.value) as size (size.label)}
-				<ZenlessDropdown trigger="click" size={size.value}>
-					{size.label}
-					{#snippet content()}<ZenlessDropdownItem value={size.label}>菜单项</ZenlessDropdownItem
-						>{/snippet}
-				</ZenlessDropdown>
-			{/each}
+			<div class="component-preview-line">
+				{#each sizes.slice(0, 2) as size (size.label)}
+					<ZenlessDropdown trigger="click" size={size.value}>
+						<ZenlessButton size={size.value} hollow icon="arrow-bottom"
+							>{size.label}菜单</ZenlessButton
+						>
+						{#snippet content()}
+							<ZenlessDropdownItem value="30">等级 Lv.30</ZenlessDropdownItem>
+							<ZenlessDropdownItem value="40">等级 Lv.40</ZenlessDropdownItem>
+							<ZenlessDropdownItem value="50">等级 Lv.50</ZenlessDropdownItem>
+							<ZenlessDropdownItem value="60" disabled>等级 Lv.60</ZenlessDropdownItem>
+						{/snippet}
+					</ZenlessDropdown>
+				{/each}
+			</div>
+			<div class="component-preview-line">
+				{#each sizes.slice(2) as size (size.label)}
+					<ZenlessDropdown trigger="click" size={size.value}>
+						<ZenlessButton size={size.value} hollow icon="arrow-bottom"
+							>{size.label}菜单</ZenlessButton
+						>
+						{#snippet content()}
+							<ZenlessDropdownItem value="30">等级 Lv.30</ZenlessDropdownItem>
+							<ZenlessDropdownItem value="40">等级 Lv.40</ZenlessDropdownItem>
+							<ZenlessDropdownItem value="50">等级 Lv.50</ZenlessDropdownItem>
+							<ZenlessDropdownItem value="60" disabled>等级 Lv.60</ZenlessDropdownItem>
+						{/snippet}
+					</ZenlessDropdown>
+				{/each}
+			</div>
 		</DemoSection>
 	{:else if slug === 'form'}
 		<DemoSection title="基础用法" class="demo--stack">
