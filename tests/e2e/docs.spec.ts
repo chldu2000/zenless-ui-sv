@@ -220,3 +220,13 @@ test('matches source input action icons', async ({ page }) => {
 	await expect(password.locator('.z-input__inner')).toHaveAttribute('type', 'text');
 	await expect(passwordIcon).toHaveClass(/z-icon-visible/);
 });
+
+test('uses dark text for selected select options', async ({ page }) => {
+	await page.goto('/components/select');
+
+	const select = page.locator('.component-preview').first().locator('.z-select');
+	await select.locator('.z-select__input').click();
+	const selected = select.getByRole('option', { selected: true });
+	await expect(selected).toBeVisible();
+	await expect(selected).toHaveCSS('color', 'rgb(0, 0, 0)');
+});

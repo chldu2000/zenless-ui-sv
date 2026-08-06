@@ -2206,7 +2206,7 @@
 	max-height: 240px;
 	border-radius: 20px;
 }
-.z-select__options .selected {
+.z-select__options .z-dropdown-item.selected {
 	color: #000;
 	animation: z_ani_background 1s ease-in-out infinite alternate;
 }
