@@ -2950,7 +2950,8 @@
 	border: 0;
 	color: inherit;
 	background: transparent;
-	font: inherit;
+	font-size: inherit;
+	line-height: 1;
 	cursor: pointer;
 }
 
