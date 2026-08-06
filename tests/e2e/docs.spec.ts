@@ -199,3 +199,24 @@ test('matches source dropdown item sizing and disabled reset', async ({ page }) 
 	});
 	await expect(disabled).toHaveJSProperty('offsetWidth', disabledContentWidth);
 });
+
+test('matches source input action icons', async ({ page }) => {
+	await page.goto('/components/input');
+
+	const clearable = page.locator('.component-preview').nth(2).locator('.z-input');
+	await clearable.hover();
+	const clearIcon = clearable.locator('.z-input__clear');
+	await expect(clearIcon).toHaveClass(/z-icon-error/);
+	await expect(clearIcon).toHaveCSS('font-family', 'material_symbols');
+	await expect(clearIcon).toHaveCSS('line-height', '14px');
+	await expect(clearIcon).toHaveCSS('height', '14px');
+	await expect(clearIcon).toHaveCSS('appearance', 'none');
+
+	const password = page.locator('.component-preview').nth(3).locator('.z-input');
+	const passwordIcon = password.locator('.z-input__clear');
+	await expect(passwordIcon).toBeVisible();
+	await expect(passwordIcon).toHaveClass(/z-icon-invisible/);
+	await passwordIcon.click();
+	await expect(password.locator('.z-input__inner')).toHaveAttribute('type', 'text');
+	await expect(passwordIcon).toHaveClass(/z-icon-visible/);
+});

@@ -56,7 +56,8 @@
 		clearable && stringValue.length > 0 && !disabled && (focused || hovering)
 	);
 	const showPassword = $derived(
-		type === 'password' && !disabled && !readonly && (focused || hovering)
+		type === 'password' &&
+			(stringValue.length > 0 || (!disabled && !readonly && (focused || hovering)))
 	);
 
 	function updateValue(next: string) {

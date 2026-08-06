@@ -2959,7 +2959,7 @@
 	border: 0;
 	color: inherit;
 	background: transparent;
-	font: inherit;
+	appearance: none;
 }
 
 .z-dropdown__trigger {
