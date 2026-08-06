@@ -403,10 +403,18 @@
 		<DemoSection title="行内表单" class="demo--stack">
 			<ZenlessForm inline style="width: fit-content">
 				<ZenlessFormItem label="Input1"
-					><ZenlessInput placeholder="请输入" class="demo-inline-input" style="width: 200px" /></ZenlessFormItem
+					><ZenlessInput
+						placeholder="请输入"
+						class="demo-inline-input"
+						style="width: 200px"
+					/></ZenlessFormItem
 				>
 				<ZenlessFormItem label="Input2"
-					><ZenlessInput placeholder="请输入" class="demo-inline-input" style="width: 200px" /></ZenlessFormItem
+					><ZenlessInput
+						placeholder="请输入"
+						class="demo-inline-input"
+						style="width: 200px"
+					/></ZenlessFormItem
 				>
 				<ZenlessFormItem
 					><ZenlessButton icon={{ success: '#00cc0d' }}>Submit</ZenlessButton></ZenlessFormItem
@@ -719,21 +727,52 @@
 		</DemoSection>
 	{:else if slug === 'tooltip'}
 		<DemoSection title="基础用法">
-			<ZenlessTooltip content="顶部提示" placement="top"
-				><ZenlessButton>上</ZenlessButton></ZenlessTooltip
-			>
-			<ZenlessTooltip content="左上提示" placement="top-left"
-				><ZenlessButton>左上</ZenlessButton></ZenlessTooltip
-			>
-			<ZenlessTooltip content="右侧提示" placement="right"
-				><ZenlessButton>右</ZenlessButton></ZenlessTooltip
-			>
-			<ZenlessTooltip content="底部提示" placement="bottom"
-				><ZenlessButton>下</ZenlessButton></ZenlessTooltip
-			>
-			<ZenlessTooltip content="始终显示" placement="left" visible
-				><ZenlessButton>显示</ZenlessButton></ZenlessTooltip
-			>
+			<div class="demo-tooltip-box">
+				<div class="top">
+					<ZenlessTooltip content="bottom-left 文字提示内容" placement="bottom-left"
+						><ZenlessButton>下左</ZenlessButton></ZenlessTooltip
+					>
+					<ZenlessTooltip content="bottom 文字提示内容" placement="bottom"
+						><ZenlessButton>下方</ZenlessButton></ZenlessTooltip
+					>
+					<ZenlessTooltip content="bottom-right 文字提示内容" placement="bottom-right"
+						><ZenlessButton>下右</ZenlessButton></ZenlessTooltip
+					>
+				</div>
+				<div class="left">
+					<ZenlessTooltip content="right-top 文字提示内容" placement="right-top"
+						><ZenlessButton>右上</ZenlessButton></ZenlessTooltip
+					>
+					<ZenlessTooltip content="right 文字提示内容" placement="right"
+						><ZenlessButton>右方</ZenlessButton></ZenlessTooltip
+					>
+					<ZenlessTooltip content="right-bottom 文字提示内容" placement="right-bottom"
+						><ZenlessButton>右下</ZenlessButton></ZenlessTooltip
+					>
+				</div>
+				<div class="right">
+					<ZenlessTooltip content="left-top 文字提示内容" placement="left-top"
+						><ZenlessButton>左上</ZenlessButton></ZenlessTooltip
+					>
+					<ZenlessTooltip content="left 文字提示内容" placement="left"
+						><ZenlessButton>左方</ZenlessButton></ZenlessTooltip
+					>
+					<ZenlessTooltip content="left-bottom 文字提示内容" placement="left-bottom"
+						><ZenlessButton>左下</ZenlessButton></ZenlessTooltip
+					>
+				</div>
+				<div class="bottom">
+					<ZenlessTooltip content="top-left 文字提示内容" placement="top-left"
+						><ZenlessButton>上左</ZenlessButton></ZenlessTooltip
+					>
+					<ZenlessTooltip content="top 文字提示内容" placement="top"
+						><ZenlessButton>上方</ZenlessButton></ZenlessTooltip
+					>
+					<ZenlessTooltip content="top-right 文字提示内容" placement="top-right"
+						><ZenlessButton>上右</ZenlessButton></ZenlessTooltip
+					>
+				</div>
+			</div>
 		</DemoSection>
 		<DemoSection title="禁用状态">
 			<ZenlessTooltip content="不会显示" disabled
@@ -812,6 +851,39 @@
 		width: 200px;
 	}
 
+	.demo-tooltip-box {
+		width: fit-content;
+	}
+
+	.demo-tooltip-box .left {
+		float: left;
+		align-items: flex-end;
+	}
+
+	.demo-tooltip-box .right {
+		float: right;
+	}
+
+	.demo-tooltip-box .left,
+	.demo-tooltip-box .right {
+		display: flex;
+		flex-direction: column;
+		width: 90px;
+	}
+
+	.demo-tooltip-box .left :global(.z-tooltip),
+	.demo-tooltip-box .right :global(.z-tooltip) {
+		margin: 5px 0;
+	}
+
+	.demo-tooltip-box .top,
+	.demo-tooltip-box .bottom {
+		display: flex;
+		justify-content: center;
+		padding: 0 100px;
+		clear: both;
+	}
+
 	:global(.pattern-demo) {
 		display: grid;
 		min-width: 9rem;
@@ -837,6 +909,11 @@
 	@media (max-width: 40rem) {
 		.icon-wrap {
 			width: calc(50% - 0.75rem);
+		}
+
+		.demo-tooltip-box .top,
+		.demo-tooltip-box .bottom {
+			padding: 0 40px;
 		}
 
 		:global(.demo--menu .z-menu) {
