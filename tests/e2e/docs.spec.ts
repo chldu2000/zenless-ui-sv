@@ -176,14 +176,26 @@ test('matches source dropdown item sizing and disabled reset', async ({ page }) 
 		const dropdown = dropdowns.nth(index);
 		await dropdown.locator('.z-dropdown__trigger').click();
 		const item = dropdown.locator('.z-dropdown-item').first();
+		const content = dropdown.locator('.z-dropdown__content');
 		await expect(item).toHaveCSS('height', expected[index].height);
 		await expect(item).toHaveCSS('font-size', expected[index].fontSize);
 		await expect(item).toHaveCSS('appearance', 'none');
+		const contentWidth = await content.evaluate((node) => {
+			const style = getComputedStyle(node);
+			return node.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
+		});
+		await expect(item).toHaveJSProperty('offsetWidth', contentWidth);
 		await dropdown.locator('.z-dropdown__trigger').click();
 	}
 
 	const disabled = dropdowns.first().locator('.z-dropdown-item[disabled]');
+	const firstContent = dropdowns.first().locator('.z-dropdown__content');
 	await dropdowns.first().locator('.z-dropdown__trigger').click();
 	await expect(disabled).toHaveCSS('border-width', '0px');
 	await expect(disabled).toHaveCSS('appearance', 'none');
+	const disabledContentWidth = await firstContent.evaluate((node) => {
+		const style = getComputedStyle(node);
+		return node.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
+	});
+	await expect(disabled).toHaveJSProperty('offsetWidth', disabledContentWidth);
 });
