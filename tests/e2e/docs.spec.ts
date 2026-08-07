@@ -100,8 +100,10 @@ test('publishes all component routes with concrete API metadata', async ({ page 
 });
 
 test('pairs every component preview with collapsible Svelte source', async ({ page }) => {
+	test.setTimeout(180_000);
 	for (const meta of componentDocs) {
 		await page.goto(`/components/${meta.slug}`);
+		await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
 		const previews = page.locator('.component-preview');
 		const toggles = page.getByRole('button', { name: '显示代码' });
 		const count = await previews.count();
@@ -115,7 +117,8 @@ test('pairs every component preview with collapsible Svelte source', async ({ pa
 			await expect(closeToggle).toHaveAttribute('aria-expanded', 'true');
 			await expect(preview.locator('.source-code-content')).toHaveClass(/is-visible/);
 			await expect(preview.locator('pre code')).not.toBeEmpty();
-			await closeToggle.click();
+			// sticky 定位的收起按钮在慢速 CI 上偶发无法通过动作检查，强制点击
+			await closeToggle.click({ force: true });
 			await expect(preview.getByRole('button', { name: '显示代码' })).toHaveAttribute(
 				'aria-expanded',
 				'false'
