@@ -154,6 +154,10 @@ test('allows dropdown menus to escape the demo preview card', async ({ page }) =
 	const menu = preview.getByRole('menu');
 	await expect(menu).toBeVisible();
 	await expect(menu.getByRole('menuitem')).toHaveCount(4);
+	// 等待展开过渡（transform 0.13s）结束，避免测量到动画中间态
+	await menu.evaluate((element) =>
+		Promise.all(element.getAnimations().map((animation) => animation.finished))
+	);
 
 	const [previewBox, menuBox] = await Promise.all([preview.boundingBox(), menu.boundingBox()]);
 	expect(previewBox).not.toBeNull();

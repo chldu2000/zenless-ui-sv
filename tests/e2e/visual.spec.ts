@@ -9,6 +9,10 @@ async function prepareVisualPage(page: import('@playwright/test').Page, path: st
 	});
 	await page.addStyleTag({
 		content: `
+			.z-menu__content .z-menu__item.is-active,
+			.z-button--highlight,
+			.z-link--highlight,
+			.z-link:active,
 			.z-tabs__item.is-active::before,
 			.z-message,
 			.z-message__content {
