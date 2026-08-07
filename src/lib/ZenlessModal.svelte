@@ -40,7 +40,7 @@
 		open = $bindable(false),
 		title = '',
 		mode = 'modal',
-		width = 450,
+		width,
 		mask = true,
 		maskClosable = true,
 		closable = true,

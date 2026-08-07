@@ -104,7 +104,13 @@ const groupAttributes = [
 const modalAttributes = [
 	attr('open / bind:open', '是否显示对话框，支持双向绑定。', 'boolean', 'true / false', 'false'),
 	attr('title', '标题文本；提供 titleContent 时由自定义标题替代。', 'string', '—', "''"),
-	attr('width', '非全屏模式下的内容宽度，number 按 px 处理。', 'string | number', '—', '450'),
+	attr(
+		'width',
+		'非全屏模式下的内容宽度，number 按 px 处理；不传时使用 CSS 默认 450px。',
+		'string | number',
+		'—',
+		'450（CSS）'
+	),
 	attr('mask', '是否显示背景遮罩。', 'boolean', 'true / false', 'true'),
 	attr('maskClosable', '点击遮罩时是否关闭。', 'boolean', 'true / false', 'true'),
 	attr('closable', '是否显示右上角关闭按钮。', 'boolean', 'true / false', 'true'),
