@@ -179,7 +179,7 @@
 							class="nav-item"
 							target="_blank"
 							rel="noreferrer"
-							href="https://github.com/ChrisChan13/zenless-ui"
+							href="https://github.com/chldu2000/zenless-ui-sv"
 						>
 							<ZenlessButton class="github">
 								<svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
@@ -219,7 +219,7 @@
 					class="github"
 					target="_blank"
 					rel="noreferrer"
-					href="https://github.com/ChrisChan13/zenless-ui"
+					href="https://github.com/chldu2000/zenless-ui-sv"
 					onclick={(event) => event.stopPropagation()}
 				>
 					<ZenlessButton>

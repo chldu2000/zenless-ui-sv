@@ -46,7 +46,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+ssh://git@github.com/ChrisChan13/zenless-ui.git"
+		"url": "git+ssh://git@github.com/chldu2000/zenless-ui-sv.git"
 	},
 	"keywords": [
 		"svelte",
