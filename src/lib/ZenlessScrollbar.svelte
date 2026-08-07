@@ -34,7 +34,6 @@
 	};
 	const captureView: Attachment<HTMLDivElement> = (node) => {
 		view = node;
-		update();
 		return () => {
 			if (view === node) view = undefined;
 		};
@@ -54,6 +53,9 @@
 		sizeX = wrap.scrollWidth ? (wrap.clientWidth / wrap.scrollWidth) * 100 : 100;
 		sizeY = wrap.scrollHeight ? (wrap.clientHeight / wrap.scrollHeight) * 100 : 100;
 	}
+	$effect(() => {
+		if (wrap && view) update();
+	});
 	function dragHorizontal(x: number) {
 		if (!wrap) return;
 		const rect = wrap.getBoundingClientRect();

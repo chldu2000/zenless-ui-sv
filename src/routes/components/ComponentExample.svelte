@@ -600,11 +600,9 @@
 		</DemoSection>
 	{:else if slug === 'scrollbar'}
 		<DemoSection title="基础用法">
-			<div class="scrollbar-demo">
-				<ZenlessScrollbar resizable={false}
-					><div class="scrollbar-content">可滚动内容</div></ZenlessScrollbar
-				>
-			</div>
+			<ZenlessScrollbar class="component-scrollbar" resizable={false}
+				><div class="scrollbar-content"></div></ZenlessScrollbar
+			>
 		</DemoSection>
 	{:else if slug === 'select'}
 		<DemoSection title="基础用法" class="demo--stack">
@@ -803,16 +801,14 @@
 		height: 400px;
 	}
 
-	.scrollbar-demo {
+	:global(.component-scrollbar) {
 		width: 100%;
 		height: 300px;
 	}
 
-	.scrollbar-content {
-		box-sizing: border-box;
+	:global(.component-scrollbar .scrollbar-content) {
 		width: 100%;
 		height: 600px;
-		padding: 1rem;
 		background: linear-gradient(transparent, #000);
 	}
 
