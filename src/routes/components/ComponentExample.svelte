@@ -133,7 +133,7 @@
 	{#if slug === 'backtop'}
 		<DemoSection title="基础用法">
 			<div class="scroll-demo" {@attach captureScroller}>
-				<div class="tall">在此区域向下滚动，再点击右下角按钮返回顶部。</div>
+				<div class="tall">在此区域向下滚动，再点击最右下角按钮返回顶部。</div>
 			</div>
 			<ZenlessBacktop target={scroller} visibleHeight={0} right={24} bottom={24} />
 		</DemoSection>
@@ -439,9 +439,8 @@
 			<ZenlessIcon name="error" size={40} color="danger" aria-label="错误" />
 			<ZenlessIcon name="info" size={32} color="electric" aria-label="信息" />
 		</DemoSection>
-		<DemoSection title="Tips">
-			<p class="component-content">可通过 <code>z-icon-*</code> 类名前缀扩展自定义图标字体。</p>
-		</DemoSection>
+		<h2 class="component-header">Tips</h2>
+		<p class="component-content">可通过 <code>z-icon-*</code> 类名前缀扩展自定义图标字体。</p>
 		<DemoSection title="图标集合">
 			{#each iconNames as name (name)}
 				<div class="icon-wrap"><ZenlessIcon {name} size={32} /><span>z-icon-{name}</span></div>
@@ -526,9 +525,8 @@
 		<DemoSection title="不同类型">
 			<ZenlessMessageHost><DemoMessageButton mode="types" /></ZenlessMessageHost>
 		</DemoSection>
-		<DemoSection title="单独引入">
-			<p class="component-content">通过 <code>message()</code> 命令式 API 调用消息提示。</p>
-		</DemoSection>
+		<h2 class="component-header">单独引入</h2>
+		<p class="component-content">通过 <code>message()</code> 命令式 API 调用消息提示。</p>
 	{:else if slug === 'modal'}
 		<DemoSection title="基础用法">
 			<ZenlessButton onclick={() => (modal = true)}>打开 Modal</ZenlessButton>
