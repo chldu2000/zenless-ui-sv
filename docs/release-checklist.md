@@ -18,4 +18,18 @@
 5. 在一个仓库外的真实 Svelte 应用安装 `zenless-ui-svelte@next`，复验 SSR/CSR 与样式。
 6. 记录包版本、消费项目和阻断修复；验证完成前不发布 stable。
 
-发布会改变外部 npm 状态，维护者已明确要求暂不执行。当前自动化的两个隔离消费项目验证的是实际 tarball，但不冒充已发布的 registry 包。
+## 通过 GitHub Actions 发布
+
+工作流位于 `.github/workflows/publish-npm.yml`，只会在 GitHub Release 发布或手动运行时发布，不会由普通分支 push 触发。
+
+推荐使用 npm Trusted Publishing（OIDC），无需保存长期 `NPM_TOKEN`：
+
+1. 在 npm 包设置的 **Trusted Publisher** 中选择 **GitHub Actions**。
+2. 填写仓库所有者 `chldu2000`、仓库 `zenless-ui-sv`、工作流文件名 `publish-npm.yml`；Environment 留空，除非同时在工作流中配置同名 GitHub Environment。
+3. 确认 GitHub 仓库允许 Actions 使用 `id-token: write`（工作流已声明）。
+4. 创建版本匹配的 GitHub Release，例如 `package.json` 为 `0.1.0-next.0` 时创建标签 `v0.1.0-next.0`。
+5. 发布预发行 Release 会使用 npm `next` 标签，正式 Release 会使用 `latest`；也可以从 Actions 手动运行并选择 dist-tag。
+
+Trusted Publishing 会通过 OIDC 完成短期认证，并由 npm 自动生成 provenance。首次启用前仍应按上面的检查清单验证 tarball 和真实消费端；在维护者确认前不要创建会触发发布的 Release。
+
+发布会改变外部 npm 状态，维护者已明确要求暂不执行。当前工作流只是完成自动化配置，不代表已经发布了 registry 包。

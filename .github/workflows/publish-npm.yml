@@ -1,0 +1,84 @@
+name: Publish npm package
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      dist_tag:
+        description: npm dist-tag used for this manual publish
+        required: true
+        default: next
+        type: choice
+        options:
+          - next
+          - latest
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: npm-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout release ref
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name || github.ref }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.32.1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Validate release version
+        if: github.event_name == 'release'
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          package_version="$(node -p "require('./package.json').version")"
+          if [[ "$RELEASE_TAG" != "v$package_version" ]]; then
+            echo "Release tag $RELEASE_TAG does not match package version v$package_version"
+            exit 1
+          fi
+
+      - name: Check package
+        run: pnpm run check:package
+
+      - name: Select npm dist-tag
+        id: dist-tag
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          RELEASE_PRERELEASE: ${{ github.event.release.prerelease }}
+          INPUT_TAG: ${{ inputs.dist_tag }}
+        run: |
+          if [[ "$EVENT_NAME" == "release" ]]; then
+            if [[ "$RELEASE_PRERELEASE" == "true" ]]; then
+              tag=next
+            else
+              tag=latest
+            fi
+          else
+            tag="${INPUT_TAG:-next}"
+          fi
+          echo "value=$tag" >> "$GITHUB_OUTPUT"
+
+      - name: Publish package
+        env:
+          NPM_CONFIG_PROVENANCE: true
+        run: npm publish --access public --tag "${{ steps.dist-tag.outputs.value }}"
