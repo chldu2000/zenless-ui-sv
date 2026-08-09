@@ -25,6 +25,7 @@ jobs:
       - run: pnpm exec playwright test --update-snapshots
       - name: Commit updated baselines
         run: |
+          cd "$GITHUB_WORKSPACE"
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add tests/e2e/visual.spec.ts-snapshots
@@ -36,3 +37,7 @@ jobs:
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: visual-snapshots
+          path: tests/e2e/visual.spec.ts-snapshots
