@@ -3,9 +3,6 @@ name: Update visual baselines
 on:
   workflow_dispatch:
 
-permissions:
-  contents: write
-
 jobs:
   update:
     runs-on: ubuntu-latest
@@ -23,20 +20,6 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec playwright install chromium
       - run: pnpm exec playwright test --update-snapshots
-      - name: Commit updated baselines
-        run: |
-          cd "$GITHUB_WORKSPACE"
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add tests/e2e/visual.spec.ts-snapshots
-          if git diff --cached --quiet; then
-            echo "Baselines are unchanged."
-          else
-            git commit -m "chore: update visual baselines"
-            git push origin HEAD:main
-          fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/upload-artifact@v4
         with:
           name: visual-snapshots
