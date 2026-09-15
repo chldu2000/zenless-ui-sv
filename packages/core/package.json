@@ -1,0 +1,8 @@
+{
+	"name": "@zenless-ui/core",
+	"private": true,
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts"
+	}
+}

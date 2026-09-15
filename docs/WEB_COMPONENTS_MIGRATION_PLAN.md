@@ -1,6 +1,6 @@
 # Zenless UI：框架无关改造路径
 
-> 状态：规划，尚未开始实现
+> 状态：实施中（阶段 0–1）
 > 更新日期：2026-09-15
 > 当前基线：`zenless-ui-svelte@0.1.0-next.0`，Svelte 5
 
@@ -185,3 +185,15 @@ Svelte 编译 Custom Elements 的能力和限制参见 [Svelte 官方文档](htt
 组件以完整行为为单位切换，迁移期间短暂并存两种实现。验收失败时撤回该组件的入口切换，保留原实现；通过后删除重复交互逻辑。记录每批提交与验证结果，最终收口前不删除整套旧实现。
 
 首个可执行批次为阶段 0–1：契约清单、最小构建、Button 纵向实现和三个高风险验证样例。完成后根据实际 CSS 改动、适配成本与浏览器结果细化后续工作量，不预先承诺重写工期。
+
+## 10. 实施记录
+
+### 2026-09-15：阶段 0–1 / Batch 1
+
+- 建立 `packages/core` 与 `packages/elements` 源码边界；普通入口不静态求值浏览器元素实现。
+- 完成 `<z-button>` 首个原生 Custom Element：open Shadow DOM、默认 slot、`part="button"`、属性/property 同步、焦点方法和 form submit/reset 行为。
+- 增加幂等 `defineButton()` / `defineAll()` 注册入口，并对标签冲突给出明确错误。
+- 在组件契约清单冻结 Button 第一版 attribute/property/slot/method/style 接口。
+- 增加 Svelte 消费夹具和真实浏览器契约测试。当前受执行环境禁止监听本地端口（`listen EPERM 127.0.0.1:4173`）影响，Playwright 用例已建立但需在允许启动预览服务的环境复跑。
+
+本批次只标志迁移开始，不代表阶段 1 完成。下一批需要补齐可发布构建产物与原生 HTML 消费夹具，然后依次进行 Input、Select、Modal 风险验证。

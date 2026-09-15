@@ -1,0 +1,9 @@
+{
+	"name": "@zenless-ui/elements",
+	"private": true,
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts",
+		"./button": "./src/button.ts"
+	}
+}
